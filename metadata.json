@@ -1,0 +1,6 @@
+{
+  "name": "Portal RT 01 RW 12 Cluster Arcadia",
+  "description": "Portal Resmi RT 01 RW 12 Cluster Arcadia Perumahan Oma Indah Kapuk, Desa Suwayuwo, Kec. Sukorejo, Kab. Pasuruan. Sistem Informasi Warga, Keuangan Transparan, Kegiatan & Pengaduan Lingkungan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
