@@ -1,7 +1,6 @@
 import React from 'react';
 import { EMERGENCY_CONTACTS } from '../../data/initialData';
 import {
-  Building2,
   MapPin,
   Shield,
   FileText,
@@ -9,13 +8,9 @@ import {
   Trash2,
   PhoneCall,
   CheckCircle2,
-  AlertCircle,
-  HelpCircle,
-  Sparkles,
-  Phone,
 } from 'lucide-react';
 
-export const ProfilWilayahTab: React.FC = () => {
+export const UserProfilTab: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Profile - Radiant Emerald & Sky Gradient */}
@@ -77,7 +72,7 @@ export const ProfilWilayahTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Tata Tertib & Peraturan Paguyuban - Colorful Category Cards */}
+      {/* Tata Tertib & Peraturan Paguyuban */}
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-sm space-y-6">
         <div className="flex items-center gap-3">
           <span className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl shadow-md">

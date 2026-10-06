@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Complaint, ComplaintStatus } from '../../types';
 import { formatDateIndo } from '../../utils/formatters';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
 import {
   MessageSquareWarning,
   PlusCircle,
@@ -16,6 +17,8 @@ import {
   Filter,
   Search,
   CheckCheck,
+  Trash2,
+  X,
 } from 'lucide-react';
 
 interface PengaduanTabProps {
@@ -44,6 +47,7 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
   const [responseText, setResponseText] = useState('');
   const [newStatus, setNewStatus] = useState<ComplaintStatus>('Diproses');
   const [petugasName, setPetugasName] = useState('Pengurus RT 01');
+  const [complaintToDelete, setComplaintToDelete] = useState<Complaint | null>(null);
 
   const filteredComplaints = complaints.filter(c => {
     const matchesFilter = activeFilter === 'Semua' || c.status === activeFilter;
@@ -75,21 +79,33 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
     setSelectedComplaintForResponse(null);
   };
 
+  const handleConfirmDelete = () => {
+    if (complaintToDelete && onDeleteComplaint) {
+      onDeleteComplaint(complaintToDelete.id);
+      setComplaintToDelete(null);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header Bar */}
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Header Bar - Vibrant & Bright */}
+      <div className="bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-rose-500/15 rounded-3xl p-6 sm:p-7 border border-amber-200/90 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="p-2 bg-amber-100 text-amber-800 rounded-xl">
-              <MessageSquareWarning className="w-5 h-5 text-amber-700" />
+          <div className="flex items-center gap-3">
+            <span className="p-3 bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-2xl shadow-md">
+              <MessageSquareWarning className="w-6 h-6" />
             </span>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-black uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-0.5 rounded-full border border-amber-300">
+                  Layanan Cepat Tanggap
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
                 Pusat Pengaduan & Aspirasi Lingkungan
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Layanan cepat tanggap fasilitas, kebersihan, ketertiban & keamanan Cluster Arcadia
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
+                Fasilitas, kebersihan, ketertiban, dan keamanan warga Cluster Arcadia
               </p>
             </div>
           </div>
@@ -97,85 +113,85 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
 
         <button
           onClick={onOpenAddComplaint}
-          className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold shadow-xs transition-colors"
+          className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95 min-h-[44px]"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Buat Laporan Aduan</span>
         </button>
       </div>
 
-      {/* Filter Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {/* Filter Stats - Bright, Radiant & Cheerful */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         <button
           onClick={() => setActiveFilter('Semua')}
-          className={`p-4 rounded-xl border text-left transition-all ${
+          className={`p-4 sm:p-5 rounded-3xl border text-left transition-all min-h-[88px] ${
             activeFilter === 'Semua'
-              ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
-              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+              ? 'bg-gradient-to-br from-slate-900 to-slate-800 text-white border-slate-900 shadow-md scale-102'
+              : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 shadow-xs'
           }`}
         >
-          <span className="text-xs font-semibold block opacity-80">Total Pengaduan</span>
-          <span className="text-2xl font-black mt-1 block">{complaints.length}</span>
+          <span className="text-xs font-bold block opacity-80">Total Pengaduan</span>
+          <span className="text-2xl sm:text-3xl font-black mt-1 block">{complaints.length}</span>
         </button>
 
         <button
           onClick={() => setActiveFilter('Menunggu')}
-          className={`p-4 rounded-xl border text-left transition-all ${
+          className={`p-4 sm:p-5 rounded-3xl border text-left transition-all min-h-[88px] ${
             activeFilter === 'Menunggu'
-              ? 'bg-amber-600 text-white border-amber-600 shadow-xs'
-              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+              ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white border-amber-500 shadow-md scale-102'
+              : 'bg-gradient-to-br from-amber-50 via-white to-amber-50/50 text-amber-950 border-amber-200 hover:border-amber-300 shadow-xs'
           }`}
         >
-          <span className="text-xs font-semibold block opacity-80">Menunggu Verifikasi</span>
-          <span className="text-2xl font-black mt-1 block text-amber-600">
+          <span className="text-xs font-bold block opacity-85">Menunggu Verifikasi</span>
+          <span className="text-2xl sm:text-3xl font-black mt-1 block">
             {complaints.filter(c => c.status === 'Menunggu').length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveFilter('Diproses')}
-          className={`p-4 rounded-xl border text-left transition-all ${
+          className={`p-4 sm:p-5 rounded-3xl border text-left transition-all min-h-[88px] ${
             activeFilter === 'Diproses'
-              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+              ? 'bg-gradient-to-br from-blue-600 to-cyan-600 text-white border-blue-600 shadow-md scale-102'
+              : 'bg-gradient-to-br from-blue-50 via-white to-cyan-50/50 text-blue-950 border-blue-200 hover:border-blue-300 shadow-xs'
           }`}
         >
-          <span className="text-xs font-semibold block opacity-80">Sedang Ditangani</span>
-          <span className="text-2xl font-black mt-1 block text-blue-600">
+          <span className="text-xs font-bold block opacity-85">Sedang Ditangani</span>
+          <span className="text-2xl sm:text-3xl font-black mt-1 block">
             {complaints.filter(c => c.status === 'Diproses').length}
           </span>
         </button>
 
         <button
           onClick={() => setActiveFilter('Selesai')}
-          className={`p-4 rounded-xl border text-left transition-all ${
+          className={`p-4 sm:p-5 rounded-3xl border text-left transition-all min-h-[88px] ${
             activeFilter === 'Selesai'
-              ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+              ? 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white border-emerald-600 shadow-md scale-102'
+              : 'bg-gradient-to-br from-emerald-50 via-white to-teal-50/50 text-emerald-950 border-emerald-200 hover:border-emerald-300 shadow-xs'
           }`}
         >
-          <span className="text-xs font-semibold block opacity-80">Selesai Dituntaskan</span>
-          <span className="text-2xl font-black mt-1 block text-emerald-600">
+          <span className="text-xs font-bold block opacity-85">Selesai Dituntaskan</span>
+          <span className="text-2xl sm:text-3xl font-black mt-1 block">
             {complaints.filter(c => c.status === 'Selesai').length}
           </span>
         </button>
       </div>
 
       {/* Search Input */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-        <div className="relative flex-1 max-w-md">
-          <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
+      <div className="bg-white p-4 sm:p-5 rounded-3xl border border-amber-100 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="relative flex-1 w-full max-w-md">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
           <input
             type="text"
             placeholder="Cari berdasarkan nomor tiket, blok, atau masalah..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-hidden"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 focus:outline-hidden min-h-[42px]"
           />
         </div>
 
-        <div className="text-xs text-slate-500">
-          Menampilkan <strong>{filteredComplaints.length}</strong> pengaduan
+        <div className="text-xs text-slate-500 font-medium self-end sm:self-auto">
+          Menampilkan <strong className="text-slate-800">{filteredComplaints.length}</strong> pengaduan
         </div>
       </div>
 
@@ -185,21 +201,21 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
           filteredComplaints.map(cmp => (
             <div
               key={cmp.id}
-              className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 hover:border-slate-300 transition-all space-y-4"
+              className="bg-white rounded-3xl border border-amber-100 shadow-xs p-5 sm:p-6 hover:shadow-md hover:border-amber-300 transition-all space-y-4"
             >
               {/* Ticket Top bar */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
+              <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-100">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-mono text-xs font-black text-slate-800 bg-slate-100 px-3 py-1 rounded-xl">
                     #{cmp.tiketNo}
                   </span>
-                  <span className="text-xs font-semibold text-slate-800 bg-amber-50 text-amber-800 px-2.5 py-1 rounded-md border border-amber-200/60">
+                  <span className="text-xs font-bold bg-amber-100 text-amber-900 px-3 py-1 rounded-xl border border-amber-200">
                     {cmp.kategori}
                   </span>
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full ${
                       cmp.prioritas === 'Mendesak / Darurat'
-                        ? 'bg-rose-100 text-rose-700 border border-rose-200'
+                        ? 'bg-rose-100 text-rose-700 border border-rose-300'
                         : cmp.prioritas === 'Sedang'
                         ? 'bg-amber-100 text-amber-700'
                         : 'bg-slate-100 text-slate-600'
@@ -211,7 +227,7 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
 
                 <div className="flex items-center gap-2">
                   <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-2xs ${
+                    className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold shadow-2xs ${
                       cmp.status === 'Selesai'
                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                         : cmp.status === 'Diproses'
@@ -233,21 +249,17 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => handleOpenResponseModal(cmp)}
-                        className="px-3 py-1 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold"
+                        className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold shadow-2xs transition-colors min-h-[36px]"
                       >
                         Update Status
                       </button>
                       {onDeleteComplaint && (
                         <button
-                          onClick={() => {
-                            if (confirm(`Hapus tiket aduan #${cmp.tiketNo} (${cmp.judul})?`)) {
-                              onDeleteComplaint(cmp.id);
-                            }
-                          }}
+                          onClick={() => setComplaintToDelete(cmp)}
                           title="Hapus Aduan"
-                          className="p-1 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50"
+                          className="p-1.5 text-rose-600 hover:text-rose-700 rounded-xl hover:bg-rose-50 transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center cursor-pointer"
                         >
-                          ✕
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       )}
                     </div>
@@ -257,47 +269,47 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
 
               {/* Title & Description */}
               <div>
-                <h3 className="font-bold text-slate-900 text-base">{cmp.judul}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">{cmp.judul}</h3>
+                <p className="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
                   {cmp.deskripsi}
                 </p>
               </div>
 
               {/* Metadata: Location, Reporter, Date */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span className="truncate">Lokasi: <strong>{cmp.lokasiSpesifik}</strong></span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-600 bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/70 font-medium">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                  <span className="truncate">Lokasi: <strong className="text-slate-800">{cmp.lokasiSpesifik}</strong></span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span>Pelapor: {cmp.namaPelapor} ({cmp.blokRumah})</span>
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-indigo-500 shrink-0" />
+                  <span>Pelapor: <strong className="text-slate-800">{cmp.namaPelapor}</strong> ({cmp.blokRumah})</span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                  <span>Tanggal Lapor: {formatDateIndo(cmp.tanggalLapor)}</span>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Tanggal: {formatDateIndo(cmp.tanggalLapor)}</span>
                 </div>
               </div>
 
               {/* Response from Pengurus RT */}
               {cmp.tanggapanPengurus && (
-                <div className="p-3.5 rounded-xl bg-emerald-50/80 border border-emerald-200/80 space-y-1">
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-1.5">
                   <div className="flex items-center justify-between text-xs font-bold text-emerald-900">
                     <span className="flex items-center gap-1.5">
-                      <CheckCheck className="w-4 h-4 text-emerald-700" />
+                      <CheckCheck className="w-4 h-4 text-emerald-600" />
                       Tindak Lanjut & Tanggapan Pengurus RT:
                     </span>
-                    <span className="text-[11px] font-normal text-emerald-700">
+                    <span className="text-[11px] font-medium text-emerald-700">
                       Petugas: {cmp.petugasTindakLanjut || 'Pengurus RT 01'}
                     </span>
                   </div>
-                  <p className="text-xs text-emerald-950 leading-relaxed font-normal">
+                  <p className="text-xs sm:text-sm text-emerald-950 leading-relaxed font-normal">
                     {cmp.tanggapanPengurus}
                   </p>
                   {cmp.tanggalSelesai && (
-                    <div className="text-[10px] text-emerald-700 font-semibold pt-1">
+                    <div className="text-[11px] text-emerald-700 font-bold pt-1">
                       ✓ Dituntaskan pada: {formatDateIndo(cmp.tanggalSelesai)}
                     </div>
                   )}
@@ -306,7 +318,7 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
             </div>
           ))
         ) : (
-          <div className="p-12 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">
+          <div className="p-12 text-center text-slate-500 bg-white rounded-3xl border border-slate-200">
             Tidak ada pengaduan warga pada kategori atau filter ini.
           </div>
         )}
@@ -315,83 +327,92 @@ export const PengaduanTab: React.FC<PengaduanTabProps> = ({
       {/* Modal Update Status & Tanggapan Pengurus */}
       {selectedComplaintForResponse && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            <div className="p-5 bg-slate-900 text-white flex justify-between items-center">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 bg-gradient-to-r from-slate-900 to-slate-800 text-white flex justify-between items-center">
               <div>
-                <h3 className="font-bold text-base">Tindak Lanjut Pengaduan Warga</h3>
-                <p className="text-xs text-slate-400">Tiket #{selectedComplaintForResponse.tiketNo}</p>
+                <h3 className="font-extrabold text-base">Tindak Lanjut & Tanggapan Pengurus</h3>
+                <p className="text-xs text-slate-300">Tiket #{selectedComplaintForResponse.tiketNo}</p>
               </div>
               <button
                 onClick={() => setSelectedComplaintForResponse(null)}
-                className="text-slate-400 hover:text-white"
+                className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleSaveResponse} className="p-6 space-y-4">
+            <form onSubmit={handleSaveResponse} className="p-5 sm:p-6 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Status Penanganan Aduan
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Update Status Aduan
                 </label>
                 <select
                   value={newStatus}
                   onChange={e => setNewStatus(e.target.value as ComplaintStatus)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-300 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-amber-500 focus:outline-hidden min-h-[42px]"
                 >
                   <option value="Menunggu">Menunggu Verifikasi</option>
-                  <option value="Diproses">Sedang Diproses Pengurus</option>
-                  <option value="Selesai">Selesai Ditangani</option>
+                  <option value="Diproses">Diproses / Sedang Ditangani</option>
+                  <option value="Selesai">Selesai Dituntaskan</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Petugas / Seksi Penanggung Jawab
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Nama Petugas Penanggung Jawab
                 </label>
                 <input
                   type="text"
                   required
                   value={petugasName}
                   onChange={e => setPetugasName(e.target.value)}
-                  placeholder="Contoh: Moch. Subhan (Seksi Kebersihan)"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 focus:outline-hidden min-h-[42px]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Uraian Tanggapan / Solusi untuk Warga *
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                  Uraian Tindak Lanjut & Tanggapan Pengurus
                 </label>
                 <textarea
                   required
                   rows={4}
                   value={responseText}
                   onChange={e => setResponseText(e.target.value)}
-                  placeholder="Tuliskan tindakan yang telah atau sedang diambil oleh pengurus..."
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
-                ></textarea>
+                  placeholder="Jelaskan tindakan yang diambil (misal: koordinasi dengan petugas satpam, pembersihan saluran selesai dikerjakan, dll)..."
+                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 focus:outline-hidden resize-none"
+                />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+              <div className="flex items-center justify-end gap-2.5 pt-2">
                 <button
                   type="button"
                   onClick={() => setSelectedComplaintForResponse(null)}
-                  className="px-4 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700"
+                  className="px-4 py-2.5 rounded-2xl border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 min-h-[42px]"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs"
+                  className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95 min-h-[42px]"
                 >
-                  Simpan & Perbarui Status
+                  Simpan Tindak Lanjut
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={!!complaintToDelete}
+        title="Hapus Tiket Pengaduan"
+        message={`Apakah Anda yakin ingin menghapus tiket #${complaintToDelete?.tiketNo} (${complaintToDelete?.judul})?`}
+        confirmText="Ya, Hapus Pengaduan"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setComplaintToDelete(null)}
+      />
     </div>
   );
 };

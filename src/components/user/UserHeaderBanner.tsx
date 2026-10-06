@@ -1,26 +1,18 @@
 import React from 'react';
-import { PhoneCall, KeyRound, LogOut, ShieldCheck, MapPin, Sparkles, FileText } from 'lucide-react';
+import { PhoneCall, KeyRound, MapPin, Sparkles } from 'lucide-react';
 
-interface HeaderBannerProps {
-  isAdminMode: boolean;
+interface UserHeaderBannerProps {
   onOpenAdminLogin: () => void;
-  onLogoutAdmin: () => void;
   onOpenEmergency: () => void;
-  onOpenCekIuran?: () => void;
-  onNavigateTab?: (tab: 'administrasi' | 'keuangan' | 'beranda' | 'warga') => void;
   totalWarga: number;
   totalKK: number;
   saldoKas: number;
   aduanAktif: number;
 }
 
-export const HeaderBanner: React.FC<HeaderBannerProps> = ({
-  isAdminMode,
+export const UserHeaderBanner: React.FC<UserHeaderBannerProps> = ({
   onOpenAdminLogin,
-  onLogoutAdmin,
   onOpenEmergency,
-  onOpenCekIuran,
-  onNavigateTab,
   totalWarga,
   totalKK,
   saldoKas,
@@ -56,7 +48,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-400/25 text-amber-200 border border-amber-300/40 flex items-center gap-1 shadow-2xs">
-                  <Sparkles className="w-3 h-3 text-amber-300 animate-spin" />
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
                   Portal Komunitas Warga
                 </span>
                 <span className="text-[11px] text-teal-100 font-medium flex items-center gap-1">
@@ -74,81 +66,44 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
             </div>
           </div>
 
-          {/* Action Buttons with high touch target & colorful styling */}
+          {/* Action Buttons for User: Nomor Darurat & Masuk Admin */}
           <div className="flex flex-wrap items-center gap-2 pt-1 md:pt-0">
-            {isAdminMode && onOpenCekIuran && (
-              <button
-                onClick={onOpenCekIuran}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-500/30 hover:bg-teal-500/40 text-teal-100 text-xs font-bold transition-all shadow-xs border border-teal-300/40 backdrop-blur-xs min-h-[42px] cursor-pointer"
-              >
-                <span>Cek Iuran</span>
-              </button>
-            )}
-
             <button
               onClick={onOpenEmergency}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-md shadow-rose-900/20 border border-rose-400/50 hover:scale-102 active:scale-98 min-h-[42px] cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-md shadow-rose-900/20 border border-rose-400/50 hover:scale-102 active:scale-98 min-h-[42px] cursor-pointer"
             >
               <PhoneCall className="w-3.5 h-3.5 animate-bounce" />
               <span>Nomor Darurat</span>
             </button>
 
-            {/* Admin Login / Logout Switcher */}
-            {isAdminMode ? (
-              <div className="flex flex-wrap items-center gap-2">
-                {onNavigateTab && (
-                  <button
-                    onClick={() => onNavigateTab('administrasi')}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white text-xs font-bold border border-cyan-300/50 transition-all shadow-sm cursor-pointer min-h-[42px]"
-                  >
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>Layanan Surat</span>
-                  </button>
-                )}
-                <div className="flex items-center gap-2 bg-amber-400/25 border border-amber-300/60 px-3 py-1.5 rounded-xl backdrop-blur-md shadow-xs min-h-[42px]">
-                  <div className="flex items-center gap-1.5 text-xs text-amber-200 font-bold">
-                    <ShieldCheck className="w-4 h-4 text-amber-300" />
-                    <span className="hidden sm:inline">Admin Aktif</span>
-                  </div>
-                  <button
-                    onClick={onLogoutAdmin}
-                    className="flex items-center gap-1 text-[11px] bg-amber-300 hover:bg-amber-200 text-slate-950 font-black px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3 h-3" />
-                    <span>Keluar</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                onClick={onOpenAdminLogin}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white text-xs font-bold border border-amber-300/50 transition-all shadow-sm hover:scale-102 active:scale-98 min-h-[42px] cursor-pointer"
-              >
-                <KeyRound className="w-3.5 h-3.5 text-amber-200" />
-                <span>Masuk Admin</span>
-              </button>
-            )}
+            <button
+              onClick={onOpenAdminLogin}
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-emerald-600 hover:from-amber-600 hover:to-emerald-700 text-white text-xs font-bold border border-amber-300/50 transition-all shadow-sm hover:scale-102 active:scale-98 min-h-[42px] cursor-pointer"
+            >
+              <KeyRound className="w-3.5 h-3.5 text-amber-200" />
+              <span>Masuk Admin</span>
+            </button>
           </div>
         </div>
 
-        {/* Quick Indicators Bar: Luminous, colorful cards */}
+        {/* Quick Indicators Bar */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3.5 mt-4 sm:mt-5 pt-3.5 sm:pt-4 border-t border-teal-400/30 text-xs">
           {/* Card 1: KK */}
-          <div className="bg-gradient-to-br from-amber-500/20 via-yellow-600/10 to-amber-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-amber-300/40 shadow-xs hover:border-amber-300 transition-colors">
+          <div className="bg-gradient-to-br from-amber-500/20 via-yellow-600/10 to-amber-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-amber-300/40 shadow-xs">
             <span className="text-amber-200 block text-[11px] font-bold">Kepala Keluarga (KK)</span>
             <span className="text-base sm:text-xl font-black text-white mt-0.5 block">{totalKK} KK Terdata</span>
             <span className="text-[10px] text-amber-200/80 block mt-0.5">Blok A, B, C, D</span>
           </div>
 
           {/* Card 2: Jiwa */}
-          <div className="bg-gradient-to-br from-sky-500/20 via-cyan-600/10 to-blue-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-sky-300/40 shadow-xs hover:border-sky-300 transition-colors">
+          <div className="bg-gradient-to-br from-sky-500/20 via-cyan-600/10 to-blue-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-sky-300/40 shadow-xs">
             <span className="text-sky-200 block text-[11px] font-bold">Total Penduduk / Jiwa</span>
             <span className="text-base sm:text-xl font-black text-white mt-0.5 block">{totalWarga} Jiwa</span>
             <span className="text-[10px] text-sky-200/80 block mt-0.5">Warga Tetap & Kontrak</span>
           </div>
 
           {/* Card 3: Saldo Kas */}
-          <div className="bg-gradient-to-br from-emerald-500/20 via-teal-600/10 to-green-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-emerald-300/40 shadow-xs hover:border-emerald-300 transition-colors">
+          <div className="bg-gradient-to-br from-emerald-500/20 via-teal-600/10 to-green-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-emerald-300/40 shadow-xs">
             <span className="text-emerald-200 block text-[11px] font-bold">Saldo Kas RT Berjalan</span>
             <span className="text-base sm:text-xl font-black text-emerald-100 mt-0.5 block">
               {new Intl.NumberFormat('id-ID', {
@@ -161,7 +116,7 @@ export const HeaderBanner: React.FC<HeaderBannerProps> = ({
           </div>
 
           {/* Card 4: Aduan */}
-          <div className="bg-gradient-to-br from-rose-500/20 via-pink-600/10 to-rose-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-rose-300/40 shadow-xs hover:border-rose-300 transition-colors">
+          <div className="bg-gradient-to-br from-rose-500/20 via-pink-600/10 to-rose-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-rose-300/40 shadow-xs">
             <span className="text-rose-200 block text-[11px] font-bold">Aduan Lingkungan Aktif</span>
             <span className="text-base sm:text-xl font-black text-white mt-0.5 block">
               {aduanAktif} Tiket Dipantau

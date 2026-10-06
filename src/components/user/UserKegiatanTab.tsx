@@ -1,34 +1,21 @@
 import React, { useState } from 'react';
 import { CommunityEvent, EventStatus } from '../../types';
 import { formatDateIndo } from '../../utils/formatters';
-import { ConfirmDialog } from '../modals/ConfirmDialog';
 import {
   CalendarDays,
   Clock,
   MapPin,
   Users,
-  PlusCircle,
   Search,
-  Trash2,
-  Sparkles,
 } from 'lucide-react';
 
-interface KegiatanTabProps {
+interface UserKegiatanTabProps {
   events: CommunityEvent[];
-  isAdminMode: boolean;
-  onOpenAddEvent: () => void;
-  onDeleteEvent?: (eventId: string) => void;
 }
 
-export const KegiatanTab: React.FC<KegiatanTabProps> = ({
-  events,
-  isAdminMode,
-  onOpenAddEvent,
-  onDeleteEvent,
-}) => {
+export const UserKegiatanTab: React.FC<UserKegiatanTabProps> = ({ events }) => {
   const [activeFilter, setActiveFilter] = useState<'Semua' | EventStatus>('Semua');
   const [searchTerm, setSearchTerm] = useState('');
-  const [eventToDelete, setEventToDelete] = useState<CommunityEvent | null>(null);
 
   const filteredEvents = events.filter(e => {
     const matchesFilter = activeFilter === 'Semua' || e.status === activeFilter;
@@ -40,16 +27,9 @@ export const KegiatanTab: React.FC<KegiatanTabProps> = ({
     return matchesFilter && matchesSearch;
   });
 
-  const handleConfirmDelete = () => {
-    if (eventToDelete && onDeleteEvent) {
-      onDeleteEvent(eventToDelete.id);
-      setEventToDelete(null);
-    }
-  };
-
   return (
     <div className="space-y-6">
-      {/* Header Bar - Bright & Radiant */}
+      {/* Header Bar */}
       <div className="bg-gradient-to-r from-emerald-500/15 via-teal-500/10 to-amber-500/15 rounded-3xl p-6 sm:p-7 border border-emerald-200/90 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
@@ -70,18 +50,6 @@ export const KegiatanTab: React.FC<KegiatanTabProps> = ({
               </p>
             </div>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {isAdminMode && (
-            <button
-              onClick={onOpenAddEvent}
-              className="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95 min-h-[44px] w-full sm:w-auto"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Buat Agenda Baru</span>
-            </button>
-          )}
         </div>
       </div>
 
@@ -207,19 +175,10 @@ export const KegiatanTab: React.FC<KegiatanTabProps> = ({
 
               {/* Clean Footer */}
               <div className="p-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-                <span className="truncate max-w-[200px]">
+                <span className="truncate">
                   Sasaran: <strong className="text-slate-800">{event.targetPeserta}</strong>
                 </span>
-
-                {isAdminMode && onDeleteEvent && (
-                  <button
-                    onClick={() => setEventToDelete(event)}
-                    title="Hapus Agenda"
-                    className="p-2 text-rose-600 hover:text-rose-700 rounded-xl hover:bg-rose-50 transition-colors min-h-[38px] min-w-[38px] flex items-center justify-center cursor-pointer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
+                <span className="text-[11px] text-emerald-700 font-semibold">RT 01 RW 12</span>
               </div>
             </div>
           ))
@@ -229,16 +188,6 @@ export const KegiatanTab: React.FC<KegiatanTabProps> = ({
           </div>
         )}
       </div>
-
-      {/* Delete Confirmation Dialog */}
-      <ConfirmDialog
-        isOpen={!!eventToDelete}
-        title="Hapus Agenda Kegiatan"
-        message={`Apakah Anda yakin ingin menghapus agenda kegiatan "${eventToDelete?.judul}"? Tindakan ini tidak dapat dibatalkan.`}
-        confirmText="Ya, Hapus Agenda"
-        onConfirm={handleConfirmDelete}
-        onCancel={() => setEventToDelete(null)}
-      />
     </div>
   );
 };

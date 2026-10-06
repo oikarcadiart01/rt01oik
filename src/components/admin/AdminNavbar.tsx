@@ -10,26 +10,25 @@ import {
   FileText,
 } from 'lucide-react';
 
-export type NavTab =
+export type AdminNavTab =
   | 'beranda'
   | 'warga'
-  | 'pengurus'
   | 'keuangan'
+  | 'pengurus'
   | 'kegiatan'
   | 'pengaduan'
-  | 'profil'
-  | 'administrasi';
+  | 'administrasi'
+  | 'profil';
 
-interface NavbarProps {
-  activeTab: NavTab;
-  setActiveTab: (tab: NavTab) => void;
+interface AdminNavbarProps {
+  activeTab: AdminNavTab;
+  setActiveTab: (tab: AdminNavTab) => void;
   complaintCount: number;
-  isAdminMode?: boolean;
   letterCount?: number;
 }
 
-interface NavItemDef {
-  id: NavTab;
+interface AdminNavItemDef {
+  id: AdminNavTab;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
@@ -39,122 +38,84 @@ interface NavItemDef {
   isAdminBadge?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
+export const AdminNavbar: React.FC<AdminNavbarProps> = ({
   activeTab,
   setActiveTab,
   complaintCount,
-  isAdminMode = false,
   letterCount = 0,
 }) => {
-  const userItems: NavItemDef[] = [
+  const navItems: AdminNavItemDef[] = [
     {
-      id: 'beranda' as NavTab,
+      id: 'beranda',
       label: 'Beranda',
       icon: LayoutDashboard,
       color: 'from-emerald-500 to-teal-600',
-      activeText: 'text-emerald-600',
+      activeText: 'text-emerald-700',
       iconColor: 'text-emerald-600',
     },
     {
-      id: 'pengurus' as NavTab,
-      label: 'Pengurus RT',
-      icon: Award,
-      color: 'from-amber-500 to-orange-600',
-      activeText: 'text-amber-600',
-      iconColor: 'text-amber-600',
-    },
-    {
-      id: 'kegiatan' as NavTab,
-      label: 'Kegiatan Lingkungan',
-      icon: CalendarDays,
-      color: 'from-violet-500 to-purple-600',
-      activeText: 'text-violet-600',
-      iconColor: 'text-violet-600',
-    },
-    {
-      id: 'profil' as NavTab,
-      label: 'Profil Wilayah',
-      icon: Building2,
-      color: 'from-blue-500 to-indigo-600',
-      activeText: 'text-blue-600',
-      iconColor: 'text-blue-600',
-    },
-  ];
-
-  const adminItems: NavItemDef[] = [
-    {
-      id: 'beranda' as NavTab,
-      label: 'Beranda',
-      icon: LayoutDashboard,
-      color: 'from-emerald-500 to-teal-600',
-      activeText: 'text-emerald-600',
-      iconColor: 'text-emerald-600',
-    },
-    {
-      id: 'warga' as NavTab,
+      id: 'warga',
       label: 'Data Warga',
       icon: Users,
       color: 'from-sky-500 to-blue-600',
-      activeText: 'text-sky-600',
+      activeText: 'text-sky-700',
       iconColor: 'text-sky-600',
       isAdminBadge: true,
     },
     {
-      id: 'keuangan' as NavTab,
+      id: 'keuangan',
       label: 'Keuangan',
       icon: Wallet,
       color: 'from-emerald-600 to-green-600',
-      activeText: 'text-emerald-600',
+      activeText: 'text-emerald-700',
       iconColor: 'text-emerald-600',
       isAdminBadge: true,
     },
     {
-      id: 'pengurus' as NavTab,
+      id: 'pengurus',
       label: 'Pengurus RT',
       icon: Award,
       color: 'from-amber-500 to-orange-600',
-      activeText: 'text-amber-600',
+      activeText: 'text-amber-700',
       iconColor: 'text-amber-600',
     },
     {
-      id: 'kegiatan' as NavTab,
+      id: 'kegiatan',
       label: 'Kegiatan Lingkungan',
       icon: CalendarDays,
       color: 'from-violet-500 to-purple-600',
-      activeText: 'text-violet-600',
+      activeText: 'text-violet-700',
       iconColor: 'text-violet-600',
     },
     {
-      id: 'pengaduan' as NavTab,
+      id: 'pengaduan',
       label: 'Pengaduan Warga',
       icon: MessageSquareWarning,
       color: 'from-rose-500 to-pink-600',
-      activeText: 'text-rose-600',
+      activeText: 'text-rose-700',
       iconColor: 'text-rose-600',
       badge: complaintCount,
       isAdminBadge: true,
     },
     {
-      id: 'administrasi' as NavTab,
+      id: 'administrasi',
       label: 'Surat & Administrasi RT',
       icon: FileText,
       color: 'from-teal-500 to-cyan-600',
-      activeText: 'text-teal-600',
+      activeText: 'text-teal-700',
       iconColor: 'text-teal-600',
       badge: letterCount > 0 ? letterCount : undefined,
       isAdminBadge: true,
     },
     {
-      id: 'profil' as NavTab,
+      id: 'profil',
       label: 'Profil Wilayah',
       icon: Building2,
       color: 'from-blue-500 to-indigo-600',
-      activeText: 'text-blue-600',
+      activeText: 'text-blue-700',
       iconColor: 'text-blue-600',
     },
   ];
-
-  const navItems = isAdminMode ? adminItems : userItems;
 
   return (
     <nav className="bg-white/95 border-b border-emerald-100/90 sticky top-0 z-40 shadow-xs backdrop-blur-md">
@@ -168,14 +129,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 relative cursor-pointer min-h-[44px] shrink-0 ${
+                className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 cursor-pointer min-h-[42px] shrink-0 ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} text-white shadow-md shadow-emerald-700/20 scale-[1.02]`
-                    : 'text-slate-700 hover:text-slate-950 bg-slate-100/80 hover:bg-emerald-50/80 border border-slate-200/60'
+                    ? `bg-gradient-to-r ${item.color} text-white shadow-md shadow-emerald-900/10 scale-102`
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
                 }`}
               >
                 <Icon
-                  className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
+                  className={`w-4 h-4 shrink-0 transition-transform ${
                     isActive ? 'text-white scale-110' : item.iconColor
                   }`}
                 />
@@ -183,10 +144,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {item.isAdminBadge && (
                   <span
-                    className={`text-[9px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider ${
+                    className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded-md ${
                       isActive
-                        ? 'bg-white/25 text-white'
-                        : 'bg-teal-100 text-teal-800'
+                        ? 'bg-white/20 text-white'
+                        : 'bg-emerald-100 text-emerald-800'
                     }`}
                   >
                     Admin
@@ -195,10 +156,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {item.badge !== undefined && item.badge > 0 && (
                   <span
-                    className={`ml-1 text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse ${
+                    className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
                       isActive
-                        ? 'bg-white text-rose-600 shadow-xs'
-                        : 'bg-rose-500 text-white'
+                        ? 'bg-white text-rose-600 shadow-2xs'
+                        : 'bg-rose-500 text-white shadow-2xs'
                     }`}
                   >
                     {item.badge}

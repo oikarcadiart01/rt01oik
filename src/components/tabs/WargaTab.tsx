@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Resident } from '../../types';
 import { exportMultiSheetExcel } from '../../utils/formatters';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
 import {
   Users,
   Search,
@@ -38,6 +39,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
   const [selectedBlock, setSelectedBlock] = useState('Semua');
   const [selectedStatusTinggal, setSelectedStatusTinggal] = useState('Semua');
   const [detailResident, setDetailResident] = useState<Resident | null>(null);
+  const [residentToDelete, setResidentToDelete] = useState<Resident | null>(null);
 
   // Statistics
   const totalKK = residents.length;
@@ -139,76 +141,76 @@ export const WargaTab: React.FC<WargaTabProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Top Banner Stats - Clean & Simple */}
+      {/* Top Banner Stats - Bright, Radiant & Cheerful */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div className="bg-gradient-to-br from-amber-50 via-white to-orange-50/70 p-4 sm:p-4.5 rounded-3xl border border-amber-200 shadow-xs hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-xs font-semibold">Kepala Keluarga (KK)</span>
-            <span className="p-1.5 bg-emerald-50 text-emerald-700 rounded-lg">
+            <span className="text-xs font-bold text-amber-900">Kepala Keluarga (KK)</span>
+            <span className="p-2 bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-xl shadow-xs">
               <Users className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl font-black text-slate-900">{totalKK} KK</div>
-          <span className="text-[11px] text-slate-400 mt-0.5 block">Cluster Arcadia</span>
+          <div className="text-2xl sm:text-3xl font-black text-amber-950 mt-1">{totalKK} KK</div>
+          <span className="text-[11px] text-amber-700/80 mt-0.5 block font-medium">Cluster Arcadia</span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div className="bg-gradient-to-br from-sky-50 via-white to-blue-50/70 p-4 sm:p-4.5 rounded-3xl border border-sky-200 shadow-xs hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-xs font-semibold">Total Penduduk</span>
-            <span className="p-1.5 bg-blue-50 text-blue-700 rounded-lg">
+            <span className="text-xs font-bold text-sky-900">Total Penduduk</span>
+            <span className="p-2 bg-gradient-to-br from-sky-400 to-blue-600 text-white rounded-xl shadow-xs">
               <Home className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl font-black text-slate-900">{totalJiwa} Jiwa</div>
-          <span className="text-[11px] text-slate-400 mt-0.5 block">Rata-rata 3-4 jiwa/KK</span>
+          <div className="text-2xl sm:text-3xl font-black text-sky-950 mt-1">{totalJiwa} Jiwa</div>
+          <span className="text-[11px] text-sky-700/80 mt-0.5 block font-medium">Rata-rata 3-4 jiwa/KK</span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div className="bg-gradient-to-br from-emerald-50 via-white to-teal-50/70 p-4 sm:p-4.5 rounded-3xl border border-emerald-200 shadow-xs hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-xs font-semibold">Warga Tetap</span>
-            <span className="p-1.5 bg-teal-50 text-teal-700 rounded-lg">
+            <span className="text-xs font-bold text-emerald-900">Warga Tetap</span>
+            <span className="p-2 bg-gradient-to-br from-emerald-400 to-teal-600 text-white rounded-xl shadow-xs">
               <Building className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl font-black text-slate-900">{totalTetap} KK</div>
-          <span className="text-[11px] text-teal-600 mt-0.5 block font-medium">Pemilik Rumah</span>
+          <div className="text-2xl sm:text-3xl font-black text-emerald-950 mt-1">{totalTetap} KK</div>
+          <span className="text-[11px] text-emerald-700 mt-0.5 block font-bold">Pemilik Rumah</span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+        <div className="bg-gradient-to-br from-rose-50 via-white to-pink-50/70 p-4 sm:p-4.5 rounded-3xl border border-rose-200 shadow-xs hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-xs font-semibold">Warga Kontrak / Sewa</span>
-            <span className="p-1.5 bg-amber-50 text-amber-700 rounded-lg">
+            <span className="text-xs font-bold text-rose-900">Warga Kontrak / Sewa</span>
+            <span className="p-2 bg-gradient-to-br from-rose-400 to-pink-600 text-white rounded-xl shadow-xs">
               <UserCheck className="w-4 h-4" />
             </span>
           </div>
-          <div className="text-2xl font-black text-slate-900">{totalKontrak} KK</div>
-          <span className="text-[11px] text-amber-700 mt-0.5 block font-medium">Sewa & Kost</span>
+          <div className="text-2xl sm:text-3xl font-black text-rose-950 mt-1">{totalKontrak} KK</div>
+          <span className="text-[11px] text-rose-700 mt-0.5 block font-bold">Sewa & Kost</span>
         </div>
       </div>
 
       {/* Control Bar: Search & Filters */}
-      <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
+      <div className="bg-white p-4 sm:p-5 rounded-3xl border border-emerald-100 shadow-xs space-y-3">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* Search bar */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-emerald-600 absolute left-3.5 top-3.5" />
             <input
               type="text"
               placeholder="Cari nama warga, blok rumah (contoh: Blok A1, B2), atau no HP..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+              className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden min-h-[44px]"
             />
           </div>
 
           {/* Action buttons: Export ONLY visible to Admin */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {isAdminMode && (
               <>
                 <button
                   onClick={handleConvertExcel}
                   title="Convert & download Excel (Sheet 1: Data KK, Sheet 2: Detail Penduduk Jiwa)"
-                  className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition-colors"
+                  className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition-all shadow-2xs min-h-[44px] cursor-pointer"
                 >
                   <FileSpreadsheet className="w-4 h-4 text-emerald-700" />
                   <span>Convert Excel (2 Sheet)</span>
@@ -216,7 +218,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
 
                 <button
                   onClick={onOpenAddWarga}
-                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md transition-all min-h-[44px] cursor-pointer"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>Tambah Warga</span>
@@ -228,14 +230,14 @@ export const WargaTab: React.FC<WargaTabProps> = ({
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-          <div className="flex items-center gap-1 text-slate-500 font-semibold mr-1">
-            <Filter className="w-3.5 h-3.5" /> Filter Blok:
+          <div className="flex items-center gap-1 text-slate-600 font-bold mr-1">
+            <Filter className="w-3.5 h-3.5 text-emerald-600" /> Filter:
           </div>
 
           <select
             value={selectedBlock}
             onChange={e => setSelectedBlock(e.target.value)}
-            className="px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 font-medium focus:outline-hidden"
+            className="px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-800 font-semibold focus:outline-hidden min-h-[40px]"
           >
             <option value="Semua">Semua Blok</option>
             <option value="Blok A">Blok A</option>
@@ -247,7 +249,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
           <select
             value={selectedStatusTinggal}
             onChange={e => setSelectedStatusTinggal(e.target.value)}
-            className="px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 font-medium focus:outline-hidden"
+            className="px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-800 font-semibold focus:outline-hidden min-h-[40px]"
           >
             <option value="Semua">Semua Status Tinggal</option>
             <option value="Tetap">Warga Tetap</option>
@@ -262,23 +264,107 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                 setSelectedBlock('Semua');
                 setSelectedStatusTinggal('Semua');
               }}
-              className="text-emerald-700 hover:text-emerald-800 font-semibold px-2 py-1"
+              className="text-emerald-700 hover:text-emerald-900 font-bold px-2 py-1 cursor-pointer"
             >
               Reset
             </button>
           )}
 
-          <div className="ml-auto text-slate-400">
-            Menampilkan <strong className="text-slate-700">{filteredResidents.length}</strong> warga
+          <div className="ml-auto text-slate-500 font-medium">
+            Menampilkan <strong className="text-slate-900">{filteredResidents.length}</strong> warga
           </div>
         </div>
       </div>
 
-      {/* Simplified, Clean Residents Table (Profesi & Catatan removed from view) */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+      {/* MOBILE CARD VIEW: Optimized for Phones (<640px) */}
+      <div className="sm:hidden space-y-3">
+        {filteredResidents.length > 0 ? (
+          filteredResidents.map(res => (
+            <div
+              key={res.id}
+              className="bg-white rounded-3xl p-4 border border-slate-200 shadow-2xs space-y-3 hover:border-emerald-300 transition-all"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <h4 className="font-bold text-slate-900 text-sm">{res.namaLengkap}</h4>
+                  <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+                    NIK: {res.nik.substring(0, 6)}••••••{res.nik.substring(12)}
+                  </div>
+                </div>
+
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+                  <Home className="w-3.5 h-3.5 text-emerald-600" />
+                  {res.blokRumah}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs">
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                    res.statusTinggal === 'Tetap'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'bg-amber-50 text-amber-700 border border-amber-200'
+                  }`}
+                >
+                  {res.statusTinggal}
+                </span>
+                <span className="text-slate-500 font-medium">{res.jumlahAnggota} Jiwa</span>
+              </div>
+
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                <a
+                  href={`https://wa.me/62${res.noHp.replace(/^0/, '')}?text=Halo%20${encodeURIComponent(res.namaLengkap)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200 hover:bg-emerald-100"
+                >
+                  <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>WhatsApp</span>
+                </a>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setDetailResident(res)}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold hover:bg-slate-200 flex items-center gap-1 min-h-[38px]"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Detail</span>
+                  </button>
+
+                  {isAdminMode && (
+                    <>
+                      <button
+                        onClick={() => onEditWarga(res)}
+                        className="p-2 rounded-xl text-blue-700 bg-blue-50 hover:bg-blue-100 min-h-[38px] min-w-[38px] flex items-center justify-center"
+                        title="Edit Warga"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setResidentToDelete(res)}
+                        className="p-2 rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 min-h-[38px] min-w-[38px] flex items-center justify-center cursor-pointer"
+                        title="Hapus Warga"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="p-8 text-center text-slate-500 bg-white rounded-3xl border border-slate-200 text-xs">
+            Tidak ada data warga yang sesuai pencarian.
+          </div>
+        )}
+      </div>
+
+      {/* TABLE VIEW FOR TABLETS & DESKTOPS (>=640px) */}
+      <div className="hidden sm:block bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs sm:text-sm">
-            <thead className="bg-slate-50/80 text-slate-700 font-bold border-b border-slate-200">
+            <thead className="bg-slate-50/90 text-slate-800 font-bold border-b border-slate-200">
               <tr>
                 <th className="py-3.5 px-4 w-12 text-center text-slate-400">No.</th>
                 <th className="py-3.5 px-4">Nama Kepala Keluarga</th>
@@ -295,7 +381,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
             <tbody className="divide-y divide-slate-100">
               {filteredResidents.length > 0 ? (
                 filteredResidents.map((res, index) => (
-                  <tr key={res.id} className="hover:bg-slate-50/70 transition-colors">
+                  <tr key={res.id} className="hover:bg-emerald-50/40 transition-colors">
                     <td className="py-3.5 px-4 text-center text-slate-400 font-mono text-xs">
                       {index + 1}
                     </td>
@@ -308,7 +394,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                     </td>
 
                     <td className="py-3.5 px-4 font-semibold text-slate-800 whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold">
                         <Home className="w-3.5 h-3.5 text-emerald-600" />
                         {res.blokRumah}
                       </span>
@@ -316,7 +402,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
 
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
-                        className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                        className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
                           res.statusTinggal === 'Tetap'
                             ? 'bg-blue-50 text-blue-700 border border-blue-200'
                             : 'bg-amber-50 text-amber-700 border border-amber-200'
@@ -324,7 +410,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                       >
                         {res.statusTinggal}
                       </span>
-                      <div className="text-[11px] text-slate-500 mt-1">
+                      <div className="text-[11px] text-slate-500 mt-1 font-medium">
                         {res.jumlahAnggota} Jiwa
                       </div>
                     </td>
@@ -336,7 +422,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                             href={`https://wa.me/62${res.noHp.replace(/^0/, '')}?text=Halo%20${encodeURIComponent(res.namaLengkap)}`}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-medium hover:underline"
+                            className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-bold hover:underline"
                           >
                             <Phone className="w-3.5 h-3.5 text-emerald-600" />
                             {res.noHp}
@@ -348,7 +434,7 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                             <button
                               onClick={() => setDetailResident(res)}
                               title="Lihat Detail Lengkap"
-                              className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-800 rounded-lg transition-colors"
+                              className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-emerald-100 hover:text-emerald-800 rounded-xl transition-colors cursor-pointer min-h-[36px]"
                             >
                               <Eye className="w-3.5 h-3.5 text-emerald-600" />
                               <span>Detail</span>
@@ -357,18 +443,14 @@ export const WargaTab: React.FC<WargaTabProps> = ({
                             <button
                               onClick={() => onEditWarga(res)}
                               title="Edit Data Warga"
-                              className="p-1.5 text-slate-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-blue-700 hover:bg-blue-50 rounded-xl transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                             >
                               <Edit className="w-3.5 h-3.5" />
                             </button>
                             <button
-                              onClick={() => {
-                                if (confirm(`Yakin ingin menghapus data warga ${res.namaLengkap}?`)) {
-                                  onDeleteWarga(res.id);
-                                }
-                              }}
+                              onClick={() => setResidentToDelete(res)}
                               title="Hapus Data Warga"
-                              className="p-1.5 text-slate-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors"
+                              className="p-2 text-rose-700 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -504,6 +586,21 @@ export const WargaTab: React.FC<WargaTabProps> = ({
           </div>
         </div>
       )}
+
+      {/* Delete Resident Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={!!residentToDelete}
+        title="Hapus Data Warga"
+        message={`Apakah Anda yakin ingin menghapus data warga ${residentToDelete?.namaLengkap} (${residentToDelete?.blokRumah})? Tindakan ini akan menghapus data dari daftar warga.`}
+        confirmText="Ya, Hapus Warga"
+        onConfirm={() => {
+          if (residentToDelete) {
+            onDeleteWarga(residentToDelete.id);
+            setResidentToDelete(null);
+          }
+        }}
+        onCancel={() => setResidentToDelete(null)}
+      />
     </div>
   );
 };

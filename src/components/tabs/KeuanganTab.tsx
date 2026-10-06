@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CashTransaction, TransactionType, Resident, PaymentStatus } from '../../types';
 import { formatRupiah, formatDateIndo, exportToCSV } from '../../utils/formatters';
 import { FinanceCharts } from '../charts/FinanceCharts';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
 import {
   Wallet,
   TrendingUp,
@@ -77,6 +78,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
     tanggal: string;
     metode: string;
   } | null>(null);
+  const [transactionToDelete, setTransactionToDelete] = useState<CashTransaction | null>(null);
 
   // Totals calculation
   const totalIncome = transactions
@@ -247,32 +249,35 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
   return (
     <div className="space-y-6">
       {/* Sub-tab Navigation */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-slate-200/90 shadow-2xs">
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-xl">
+      {/* Sub-tab Navigation */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 rounded-3xl border border-emerald-100 shadow-xs">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100/80 rounded-2xl">
           <button
             onClick={() => setActiveSubTab('bukuKas')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+            className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all min-h-[42px] cursor-pointer ${
               activeSubTab === 'bukuKas'
-                ? 'bg-white text-emerald-800 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm shadow-emerald-700/20'
+                : 'text-slate-700 hover:text-emerald-800 hover:bg-white/60'
             }`}
           >
-            <Wallet className="w-4 h-4 text-emerald-600" />
+            <Wallet className="w-4 h-4" />
             <span>Buku Kas & Grafik</span>
           </button>
 
           <button
             onClick={() => setActiveSubTab('statusIuran')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all relative ${
+            className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all relative min-h-[42px] cursor-pointer ${
               activeSubTab === 'statusIuran'
-                ? 'bg-white text-emerald-800 shadow-2xs'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-sm shadow-emerald-700/20'
+                : 'text-slate-700 hover:text-emerald-800 hover:bg-white/60'
             }`}
           >
-            <CreditCard className="w-4 h-4 text-emerald-600" />
+            <CreditCard className="w-4 h-4" />
             <span>Data Status Iuran</span>
             {totalBelum > 0 && (
-              <span className="ml-1 text-[10px] bg-rose-500 text-white px-1.5 py-0.2 rounded-full font-bold">
+              <span className={`ml-1 text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                activeSubTab === 'statusIuran' ? 'bg-white text-rose-600' : 'bg-rose-500 text-white'
+              }`}>
                 {totalBelum}
               </span>
             )}
@@ -282,14 +287,14 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
           {isAdminMode && (
             <button
               onClick={() => setActiveSubTab('sistemIuran')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all relative ${
+              className={`flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all relative min-h-[42px] cursor-pointer ${
                 activeSubTab === 'sistemIuran'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-xs'
-                  : 'text-emerald-800 hover:bg-emerald-50'
+                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-sm shadow-amber-500/20'
+                  : 'text-amber-800 hover:bg-amber-50 font-bold'
               }`}
             >
               <Receipt className="w-4 h-4" />
-              <span>Sistem Iuran Bulanan RT</span>
+              <span>Sistem Iuran Bulanan (Admin)</span>
             </button>
           )}
         </div>
@@ -297,7 +302,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
         <div className="flex items-center gap-2 self-end sm:self-auto">
           <button
             onClick={onOpenCekIuran}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-semibold border border-teal-200 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold border border-teal-200 transition-colors min-h-[42px] cursor-pointer"
           >
             <Search className="w-3.5 h-3.5 text-teal-600" />
             <span>Cek Iuran Rumah</span>
@@ -306,7 +311,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
           {isAdminMode && (
             <button
               onClick={() => setIsPrintPreview(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors min-h-[42px] cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5 text-slate-500" />
               <span>Cetak Laporan</span>
@@ -318,55 +323,55 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
       {activeSubTab === 'bukuKas' && (
         /* Tab 1: Buku Kas & Grafik */
         <div className="space-y-6">
-          {/* Summary Cards */}
+          {/* Summary Cards - Bright & Colorful */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center justify-between">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-teal-50/80 p-5 rounded-3xl border border-emerald-200 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
               <div>
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wider block">
                   Saldo Kas Berjalan
                 </span>
-                <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                <div className="text-2xl sm:text-3xl font-black text-emerald-950 mt-1">
                   {formatRupiah(saldoKas)}
                 </div>
-                <span className="text-[11px] text-emerald-700 font-semibold mt-1 inline-flex items-center gap-1">
+                <span className="text-[11px] text-emerald-700 font-bold mt-1 inline-flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Kas RT dalam kondisi aman & sehat
                 </span>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+              <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                 <Wallet className="w-6 h-6" />
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center justify-between">
+            <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50/80 p-5 rounded-3xl border border-green-200 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
               <div>
-                <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider block">
+                <span className="text-xs font-extrabold text-green-800 uppercase tracking-wider block">
                   Total Kas Masuk
                 </span>
-                <div className="text-2xl font-black text-slate-900 mt-1">
+                <div className="text-2xl sm:text-3xl font-black text-green-950 mt-1">
                   {formatRupiah(totalIncome)}
                 </div>
-                <span className="text-[11px] text-slate-500 mt-1 block">
+                <span className="text-[11px] text-slate-500 mt-1 block font-medium">
                   Iuran wajib warga, donasi, & sewa fasum
                 </span>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+              <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                 <TrendingUp className="w-6 h-6" />
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center justify-between">
+            <div className="bg-gradient-to-br from-rose-50 via-white to-pink-50/80 p-5 rounded-3xl border border-rose-200 shadow-xs flex items-center justify-between hover:shadow-md transition-shadow">
               <div>
-                <span className="text-xs font-bold text-rose-700 uppercase tracking-wider block">
+                <span className="text-xs font-extrabold text-rose-800 uppercase tracking-wider block">
                   Total Kas Keluar
                 </span>
-                <div className="text-2xl font-black text-slate-900 mt-1">
+                <div className="text-2xl sm:text-3xl font-black text-rose-950 mt-1">
                   {formatRupiah(totalExpense)}
                 </div>
-                <span className="text-[11px] text-slate-500 mt-1 block">
+                <span className="text-[11px] text-slate-500 mt-1 block font-medium">
                   Operasional satpam, sampah, PJU & taman
                 </span>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center shrink-0">
+              <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-rose-400 to-pink-600 text-white flex items-center justify-center shrink-0 shadow-xs">
                 <TrendingDown className="w-6 h-6" />
               </div>
             </div>
@@ -518,12 +523,8 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                         {isAdminMode && (
                           <td className="py-3.5 px-4 text-center whitespace-nowrap">
                             <button
-                              onClick={() => {
-                                if (confirm('Hapus transaksi ini dari buku kas?')) {
-                                  onDeleteTransaction(tx.id);
-                                }
-                              }}
-                              className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
+                              onClick={() => setTransactionToDelete(tx)}
+                              className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
                               title="Hapus Transaksi"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -550,42 +551,42 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
         /* Tab 2: Status Iuran Warga */
         <div className="space-y-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-slate-500 font-semibold block">Total Kepala Keluarga</span>
-              <div className="text-2xl font-black text-slate-900 mt-1">{totalKK} KK</div>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">Cluster Arcadia</span>
+            <div className="bg-gradient-to-br from-amber-50 via-white to-orange-50/70 p-4 sm:p-4.5 rounded-3xl border border-amber-200 shadow-xs">
+              <span className="text-xs font-bold text-amber-900 block">Total Kepala Keluarga</span>
+              <div className="text-2xl sm:text-3xl font-black text-amber-950 mt-1">{totalKK} KK</div>
+              <span className="text-[11px] text-amber-700/80 mt-0.5 block font-medium">Cluster Arcadia</span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-emerald-700 font-semibold block">Sudah Lunas (Okt 2026)</span>
-              <div className="text-2xl font-black text-emerald-700 mt-1">{totalLunas} KK</div>
-              <span className="text-[11px] text-slate-500 mt-0.5 block">{formatRupiah(realisasiIuranBulanIni)} terkumpul</span>
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-teal-50/70 p-4 sm:p-4.5 rounded-3xl border border-emerald-200 shadow-xs">
+              <span className="text-xs font-bold text-emerald-900 block">Sudah Lunas (Okt 2026)</span>
+              <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">{totalLunas} KK</div>
+              <span className="text-[11px] text-emerald-700 mt-0.5 block font-bold">{formatRupiah(realisasiIuranBulanIni)} terkumpul</span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-rose-700 font-semibold block">Belum / Menunggak</span>
-              <div className="text-2xl font-black text-rose-700 mt-1">{totalBelum} KK</div>
-              <span className="text-[11px] text-rose-500 mt-0.5 block">Perlu konfirmasi</span>
+            <div className="bg-gradient-to-br from-rose-50 via-white to-pink-50/70 p-4 sm:p-4.5 rounded-3xl border border-rose-200 shadow-xs">
+              <span className="text-xs font-bold text-rose-900 block">Belum / Menunggak</span>
+              <div className="text-2xl sm:text-3xl font-black text-rose-800 mt-1">{totalBelum} KK</div>
+              <span className="text-[11px] text-rose-700 mt-0.5 block font-bold">Perlu konfirmasi</span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-blue-700 font-semibold block">Persentase Kepatuhan</span>
-              <div className="text-2xl font-black text-blue-700 mt-1">{persenLunas}%</div>
-              <span className="text-[11px] text-slate-500 mt-0.5 block">Target 100% tgl 10</span>
+            <div className="bg-gradient-to-br from-sky-50 via-white to-blue-50/70 p-4 sm:p-4.5 rounded-3xl border border-sky-200 shadow-xs">
+              <span className="text-xs font-bold text-sky-900 block">Persentase Kepatuhan</span>
+              <div className="text-2xl sm:text-3xl font-black text-sky-800 mt-1">{persenLunas}%</div>
+              <span className="text-[11px] text-sky-700 mt-0.5 block font-bold">Target 100% tgl 10</span>
             </div>
           </div>
 
           {/* Iuran Control Bar */}
-          <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
+          <div className="bg-white p-4 sm:p-5 rounded-3xl border border-emerald-100 shadow-xs space-y-3">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div className="relative flex-1">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                <Search className="w-4 h-4 text-emerald-600 absolute left-3.5 top-3.5" />
                 <input
                   type="text"
                   placeholder="Cari warga atau blok rumah untuk cek iuran..."
                   value={iuranSearch}
                   onChange={e => setIuranSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl border border-slate-300 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden min-h-[44px]"
                 />
               </div>
 
@@ -593,9 +594,9 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleExportCSV}
-                    className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition-colors min-h-[44px] cursor-pointer"
                   >
-                    <Download className="w-4 h-4 text-slate-500" />
+                    <Download className="w-4 h-4 text-emerald-600" />
                     <span>Ekspor Rekap Iuran</span>
                   </button>
                 </div>
@@ -606,7 +607,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
               <select
                 value={iuranStatusFilter}
                 onChange={e => setIuranStatusFilter(e.target.value as 'Semua' | PaymentStatus)}
-                className="px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 font-medium focus:outline-hidden"
+                className="px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-800 font-semibold focus:outline-hidden min-h-[40px]"
               >
                 <option value="Semua">Semua Status Iuran</option>
                 <option value="Lunas">Lunas (Oktober 2026)</option>
@@ -617,7 +618,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
               <select
                 value={iuranBlockFilter}
                 onChange={e => setIuranBlockFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-slate-700 font-medium focus:outline-hidden"
+                className="px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-slate-800 font-semibold focus:outline-hidden min-h-[40px]"
               >
                 <option value="Semua">Semua Blok</option>
                 <option value="Blok A">Blok A</option>
@@ -633,23 +634,99 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                     setIuranStatusFilter('Semua');
                     setIuranBlockFilter('Semua');
                   }}
-                  className="text-emerald-700 hover:text-emerald-800 font-semibold px-2 py-1"
+                  className="text-emerald-700 hover:text-emerald-900 font-bold px-2 py-1 cursor-pointer"
                 >
                   Reset
                 </button>
               )}
 
-              <div className="ml-auto text-slate-400">
-                Menampilkan <strong>{filteredIuranResidents.length}</strong> KK
+              <div className="ml-auto text-slate-500 font-medium">
+                Menampilkan <strong className="text-slate-900">{filteredIuranResidents.length}</strong> KK
               </div>
             </div>
           </div>
 
-          {/* Iuran Resident Table */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+          {/* MOBILE VIEW: Cards for Small Screens (<640px) */}
+          <div className="sm:hidden space-y-3">
+            {filteredIuranResidents.length > 0 ? (
+              filteredIuranResidents.map(r => (
+                <div
+                  key={r.id}
+                  className="bg-white rounded-3xl p-4 border border-slate-200 shadow-2xs space-y-3 hover:border-emerald-300 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <h4 className="font-bold text-slate-900 text-sm">{r.namaLengkap}</h4>
+                      <div className="text-[11px] text-slate-400 mt-0.5">{r.statusTinggal}</div>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold">
+                      <Home className="w-3.5 h-3.5 text-emerald-600" />
+                      {r.blokRumah}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-1 text-xs">
+                    <div>
+                      <span className="text-slate-400 block text-[10px]">Besaran Iuran:</span>
+                      <strong className="text-slate-900 text-sm">{formatRupiah(100000)}</strong>
+                    </div>
+
+                    <span
+                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold ${
+                        r.statusIuran === 'Lunas'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                          : r.statusIuran === 'Belum Lunas'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                          : 'bg-rose-100 text-rose-800 border border-rose-300'
+                      }`}
+                    >
+                      {r.statusIuran === 'Lunas' ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      ) : (
+                        <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                      )}
+                      {r.statusIuran}
+                    </span>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-500 font-medium">
+                      Bulan: <strong>{r.iuranTerakhirBulan}</strong>
+                    </span>
+
+                    {isAdminMode && (
+                      r.statusIuran === 'Lunas' ? (
+                        <button
+                          onClick={() => onUpdateResidentPaymentStatus(r.id, 'Belum Lunas', 'September 2026')}
+                          className="px-3 py-1.5 text-xs rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold min-h-[38px] cursor-pointer"
+                        >
+                          Batalkan Lunas
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => onUpdateResidentPaymentStatus(r.id, 'Lunas', 'Oktober 2026')}
+                          className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-2xs min-h-[38px] cursor-pointer"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Tandai Lunas</span>
+                        </button>
+                      )
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-8 text-center text-slate-500 bg-white rounded-3xl border border-slate-200 text-xs">
+                Tidak ada data status iuran yang sesuai filter.
+              </div>
+            )}
+          </div>
+
+          {/* TABLET & DESKTOP VIEW: Full Table (>=640px) */}
+          <div className="hidden sm:block bg-white rounded-3xl border border-slate-200 shadow-2xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="bg-slate-50/80 text-slate-700 font-bold border-b border-slate-200">
+                <thead className="bg-slate-50/90 text-slate-800 font-bold border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4 w-12 text-center text-slate-400">No.</th>
                     <th className="py-3 px-4">Nama Kepala Keluarga</th>
@@ -663,7 +740,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                 <tbody className="divide-y divide-slate-100">
                   {filteredIuranResidents.length > 0 ? (
                     filteredIuranResidents.map((r, index) => (
-                      <tr key={r.id} className="hover:bg-slate-50/70 transition-colors">
+                      <tr key={r.id} className="hover:bg-emerald-50/40 transition-colors">
                         <td className="py-3.5 px-4 text-center text-slate-400 font-mono text-xs">
                           {index + 1}
                         </td>
@@ -674,7 +751,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                         </td>
 
                         <td className="py-3.5 px-4 whitespace-nowrap">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold">
                             <Home className="w-3.5 h-3.5 text-emerald-600" />
                             {r.blokRumah}
                           </span>
@@ -717,7 +794,7 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                                     onUpdateResidentPaymentStatus(r.id, 'Belum Lunas', 'September 2026')
                                   }
                                   title="Ubah status jadi belum bayar"
-                                  className="px-2.5 py-1 text-xs rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-700 transition-colors"
+                                  className="px-2.5 py-1 text-xs rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 transition-colors cursor-pointer min-h-[36px]"
                                 >
                                   Batalkan Lunas
                                 </button>
@@ -727,10 +804,10 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
                                     onUpdateResidentPaymentStatus(r.id, 'Lunas', 'Oktober 2026')
                                   }
                                   title="Tandai sudah bayar bulan ini"
-                                  className="flex items-center gap-1 px-3 py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs transition-colors"
+                                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-2xs transition-colors cursor-pointer min-h-[36px]"
                                 >
                                   <Check className="w-3.5 h-3.5" />
-                                  Tandai Lunas
+                                  <span>Tandai Lunas</span>
                                 </button>
                               )}
                             </div>
@@ -755,50 +832,50 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
       {/* Tab 3: Sistem Iuran Bulanan RT & Matriks 12 Bulan (Khusus Admin) */}
       {activeSubTab === 'sistemIuran' && isAdminMode && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          {/* Top Banner Stats for Monthly Dues */}
+          {/* Top Banner Stats for Monthly Dues - Bright, Radiant & Cheerful */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-slate-500 font-semibold block">Target Iuran Bulanan</span>
-              <div className="text-2xl font-black text-slate-900 mt-1">
+            <div className="bg-gradient-to-br from-amber-50 via-white to-orange-50/70 p-4 sm:p-4.5 rounded-3xl border border-amber-200 shadow-xs">
+              <span className="text-xs font-bold text-amber-900 block">Target Iuran Bulanan</span>
+              <div className="text-2xl sm:text-3xl font-black text-amber-950 mt-1">
                 {formatRupiah(totalKK * 100000)}
               </div>
-              <span className="text-[11px] text-slate-400 mt-0.5 block">{totalKK} KK x Rp 100.000</span>
+              <span className="text-[11px] text-amber-700/80 mt-0.5 block font-medium">{totalKK} KK x Rp 100.000</span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-emerald-700 font-semibold block">Realisasi Bulan Ini (Okt)</span>
-              <div className="text-2xl font-black text-emerald-700 mt-1">
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-teal-50/70 p-4 sm:p-4.5 rounded-3xl border border-emerald-200 shadow-xs">
+              <span className="text-xs font-bold text-emerald-900 block">Realisasi Bulan Ini (Okt)</span>
+              <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-1">
                 {formatRupiah(realisasiIuranBulanIni)}
               </div>
-              <span className="text-[11px] text-emerald-600 mt-0.5 block font-medium">
+              <span className="text-[11px] text-emerald-700 mt-0.5 block font-bold">
                 {totalLunas} dari {totalKK} KK ({persenLunas}%) Lunas
               </span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-rose-600 font-semibold block">Tunggakan Bulan Ini</span>
-              <div className="text-2xl font-black text-rose-600 mt-1">
+            <div className="bg-gradient-to-br from-rose-50 via-white to-pink-50/70 p-4 sm:p-4.5 rounded-3xl border border-rose-200 shadow-xs">
+              <span className="text-xs font-bold text-rose-900 block">Tunggakan Bulan Ini</span>
+              <div className="text-2xl sm:text-3xl font-black text-rose-800 mt-1">
                 {formatRupiah(totalBelum * 100000)}
               </div>
-              <span className="text-[11px] text-rose-500 mt-0.5 block font-medium">
+              <span className="text-[11px] text-rose-700 mt-0.5 block font-bold">
                 {totalBelum} KK belum membayar
               </span>
             </div>
 
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
-              <span className="text-xs text-blue-700 font-semibold block">Alokasi Kas Bulanan</span>
+            <div className="bg-gradient-to-br from-sky-50 via-white to-blue-50/70 p-4 sm:p-4.5 rounded-3xl border border-sky-200 shadow-xs">
+              <span className="text-xs font-bold text-sky-900 block">Alokasi Kas Bulanan</span>
               <div className="text-xs font-bold text-slate-800 space-y-0.5 mt-1.5">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Satpam 24 Jam:</span>
-                  <span>Rp 50.000</span>
+                  <span className="text-slate-500 font-medium">Satpam 24 Jam:</span>
+                  <span className="text-emerald-700">Rp 50.000</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Sampah & Kebersihan:</span>
-                  <span>Rp 30.000</span>
+                  <span className="text-slate-500 font-medium">Sampah & Kebersihan:</span>
+                  <span className="text-teal-700">Rp 30.000</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Kas Sosial RT:</span>
-                  <span>Rp 20.000</span>
+                  <span className="text-slate-500 font-medium">Kas Sosial RT:</span>
+                  <span className="text-sky-700">Rp 20.000</span>
                 </div>
               </div>
             </div>
@@ -1365,6 +1442,21 @@ export const KeuanganTab: React.FC<KeuanganTabProps> = ({
           </div>
         </div>
       )}
+
+      {/* Delete Transaction Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={!!transactionToDelete}
+        title="Hapus Catatan Transaksi Kas"
+        message={`Apakah Anda yakin ingin menghapus transaksi "${transactionToDelete?.keterangan}" sebesar ${transactionToDelete ? formatRupiah(transactionToDelete.nominal) : ''}?`}
+        confirmText="Ya, Hapus Transaksi"
+        onConfirm={() => {
+          if (transactionToDelete) {
+            onDeleteTransaction(transactionToDelete.id);
+            setTransactionToDelete(null);
+          }
+        }}
+        onCancel={() => setTransactionToDelete(null)}
+      />
     </div>
   );
 };

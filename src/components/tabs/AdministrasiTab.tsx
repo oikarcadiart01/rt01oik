@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Resident, OfficialLetter, JenisSuratPengantar, RTInventoryItem, RTGuestLog } from '../../types';
 import { formatDateIndo } from '../../utils/formatters';
+import { ConfirmDialog } from '../modals/ConfirmDialog';
 import {
   FileText,
   PlusCircle,
@@ -63,6 +64,7 @@ export const AdministrasiTab: React.FC<AdministrasiTabProps> = ({
   const [selectedJenisFilter, setSelectedJenisFilter] = useState<string>('Semua');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedLetterForPrint, setSelectedLetterForPrint] = useState<OfficialLetter | null>(null);
+  const [letterToDelete, setLetterToDelete] = useState<OfficialLetter | null>(null);
 
   // Guest Log State
   const [guestLogs, setGuestLogs] = useState<RTGuestLog[]>(() => {
@@ -493,11 +495,7 @@ export const AdministrasiTab: React.FC<AdministrasiTabProps> = ({
                             </button>
 
                             <button
-                              onClick={() => {
-                                if (confirm(`Hapus arsip surat ${letter.nomorSurat}?`)) {
-                                  onDeleteLetter(letter.id);
-                                }
-                              }}
+                              onClick={() => setLetterToDelete(letter)}
                               title="Hapus Surat"
                               className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
                             >
@@ -1223,6 +1221,21 @@ export const AdministrasiTab: React.FC<AdministrasiTabProps> = ({
           </div>
         </div>
       )}
+
+      {/* Delete Letter Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={!!letterToDelete}
+        title="Hapus Arsip Surat Pengantar"
+        message={`Apakah Anda yakin ingin menghapus arsip surat ${letterToDelete?.nomorSurat} atas nama ${letterToDelete?.namaPemohon}?`}
+        confirmText="Ya, Hapus Surat"
+        onConfirm={() => {
+          if (letterToDelete) {
+            onDeleteLetter(letterToDelete.id);
+            setLetterToDelete(null);
+          }
+        }}
+        onCancel={() => setLetterToDelete(null)}
+      />
     </div>
   );
 };
