@@ -102,18 +102,7 @@ export const UserHeaderBanner: React.FC<UserHeaderBannerProps> = ({
             <span className="text-[10px] text-sky-200/80 block mt-0.5">Warga Tetap & Kontrak</span>
           </div>
 
-          {/* Card 3: Saldo Kas */}
-          <div className="bg-gradient-to-br from-emerald-500/20 via-teal-600/10 to-green-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-emerald-300/40 shadow-xs">
-            <span className="text-emerald-200 block text-[11px] font-bold">Saldo Kas RT Berjalan</span>
-            <span className="text-base sm:text-xl font-black text-emerald-100 mt-0.5 block">
-              {new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                maximumFractionDigits: 0,
-              }).format(saldoKas)}
-            </span>
-            <span className="text-[10px] text-emerald-200/80 block mt-0.5">Kas Transparan 100%</span>
-          </div>
+          
 
           {/* Card 4: Aduan */}
           <div className="bg-gradient-to-br from-rose-500/20 via-pink-600/10 to-rose-700/20 backdrop-blur-md rounded-2xl p-3 sm:p-3.5 border border-rose-300/40 shadow-xs">
