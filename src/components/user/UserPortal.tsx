@@ -4,6 +4,7 @@ import {
   Official,
   CommunityEvent,
   Resident,
+  EventDocumentation,
 } from '../../types';
 import { UserHeaderBanner } from './UserHeaderBanner';
 import { UserNavbar, UserNavTab } from './UserNavbar';
@@ -12,6 +13,8 @@ import { UserBerandaTab } from './UserBerandaTab';
 import { UserPengurusTab } from './UserPengurusTab';
 import { UserKegiatanTab } from './UserKegiatanTab';
 import { UserProfilTab } from './UserProfilTab';
+import { TataTertibTab } from '../tabs/TataTertibTab';
+import { NomorDaruratTab } from '../tabs/NomorDaruratTab';
 import { EmergencyModal } from '../modals/EmergencyModal';
 import { AdminLoginModal } from '../modals/AdminLoginModal';
 import { Heart } from 'lucide-react';
@@ -22,7 +25,7 @@ interface UserPortalProps {
   events: CommunityEvent[];
   residents: Resident[];
   saldoKas: number;
-  aduanAktif: number;
+  documentations?: EventDocumentation[];
   onLoginSuccess: () => void;
 }
 
@@ -32,25 +35,20 @@ export const UserPortal: React.FC<UserPortalProps> = ({
   events,
   residents,
   saldoKas,
-  aduanAktif,
+  documentations = [],
   onLoginSuccess,
 }) => {
   const [activeTab, setActiveTab] = useState<UserNavTab>('beranda');
   const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
   const [isAdminLoginOpen, setIsAdminLoginOpen] = useState(false);
 
-  const totalJiwa = residents.reduce((sum, r) => sum + r.jumlahAnggota, 0);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50/60 via-slate-50 to-amber-50/40 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
-      {/* Header Banner Khusus Warga */}
+      {/* Header Banner Khusus Warga (Tanpa KK, total penduduk, atau aduan aktif) */}
       <UserHeaderBanner
         onOpenAdminLogin={() => setIsAdminLoginOpen(true)}
         onOpenEmergency={() => setIsEmergencyOpen(true)}
-        totalWarga={totalJiwa}
-        totalKK={residents.length}
         saldoKas={saldoKas}
-        aduanAktif={aduanAktif}
       />
 
       {/* Navigasi Khusus Warga */}
@@ -70,11 +68,19 @@ export const UserPortal: React.FC<UserPortalProps> = ({
         )}
 
         {activeTab === 'kegiatan' && (
-          <UserKegiatanTab events={events} />
+          <UserKegiatanTab events={events} documentations={documentations} />
         )}
 
         {activeTab === 'profil' && (
           <UserProfilTab />
+        )}
+
+        {activeTab === 'tatatertib' && (
+          <TataTertibTab />
+        )}
+
+        {activeTab === 'darurat' && (
+          <NomorDaruratTab />
         )}
       </main>
 

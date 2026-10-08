@@ -31,7 +31,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
   const [blokRumah, setBlokRumah] = useState('');
   const [noHp, setNoHp] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
-  const [periode, setPeriode] = useState('2024 - 2027');
+  const [periode, setPeriode] = useState('2026 - 2031');
 
   useEffect(() => {
     if (official) {
@@ -40,7 +40,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
       setBlokRumah(official.blokRumah);
       setNoHp(official.noHp);
       setFotoUrl(official.fotoUrl);
-      setPeriode(official.periode || '2024 - 2027');
+      setPeriode(official.periode || '2026 - 2031');
     }
   }, [official]);
 
@@ -229,7 +229,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
                 type="text"
                 value={periode}
                 onChange={e => setPeriode(e.target.value)}
-                placeholder="2024 - 2027"
+                placeholder="2026 - 2031"
                 className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-hidden"
               />
             </div>

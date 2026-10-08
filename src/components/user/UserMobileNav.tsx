@@ -9,6 +9,7 @@ import {
   X,
   PhoneCall,
   KeyRound,
+  FileText,
 } from 'lucide-react';
 
 interface UserMobileNavProps {
@@ -78,7 +79,7 @@ export const UserMobileNav: React.FC<UserMobileNavProps> = ({
 
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <h3 className="font-extrabold text-slate-900 text-base">
-                Layanan & Bantuan Warga
+                Menu Lengkap Warga
               </h3>
               <button
                 onClick={() => setIsMoreMenuOpen(false)}
@@ -90,14 +91,37 @@ export const UserMobileNav: React.FC<UserMobileNavProps> = ({
 
             <div className="mt-4 space-y-2.5">
               <button
-                onClick={() => {
-                  setIsMoreMenuOpen(false);
-                  onOpenEmergency();
-                }}
-                className="w-full p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 font-bold text-xs flex items-center justify-center gap-2 hover:bg-rose-100 cursor-pointer min-h-[46px]"
+                onClick={() => handleSelectTab('tatatertib')}
+                className={`w-full p-3.5 rounded-2xl border font-bold text-xs flex items-center gap-3 transition-colors cursor-pointer min-h-[46px] ${
+                  activeTab === 'tatatertib'
+                    ? 'bg-teal-50 border-teal-300 text-teal-900'
+                    : 'bg-slate-50 border-slate-200 text-slate-800 hover:bg-teal-50/50'
+                }`}
               >
-                <PhoneCall className="w-4 h-4 text-rose-600 shrink-0" />
-                <span>Nomor Darurat & Kontak Satpam</span>
+                <span className="p-2 bg-teal-100 text-teal-700 rounded-xl">
+                  <FileText className="w-4 h-4 shrink-0" />
+                </span>
+                <div className="text-left">
+                  <span className="block font-black">Tata Tertib & Peraturan</span>
+                  <span className="text-[10px] text-slate-500 font-normal">Pedoman kenyamanan & ketertiban cluster</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => handleSelectTab('darurat')}
+                className={`w-full p-3.5 rounded-2xl border font-bold text-xs flex items-center gap-3 transition-colors cursor-pointer min-h-[46px] ${
+                  activeTab === 'darurat'
+                    ? 'bg-rose-50 border-rose-300 text-rose-900'
+                    : 'bg-slate-50 border-slate-200 text-slate-800 hover:bg-rose-50/50'
+                }`}
+              >
+                <span className="p-2 bg-rose-100 text-rose-700 rounded-xl">
+                  <PhoneCall className="w-4 h-4 shrink-0" />
+                </span>
+                <div className="text-left">
+                  <span className="block font-black">Nomor Darurat & Kontak Satpam</span>
+                  <span className="text-[10px] text-slate-500 font-normal">Polsek, medis, satpam, damkar & PLN</span>
+                </div>
               </button>
 
               <button
@@ -105,7 +129,7 @@ export const UserMobileNav: React.FC<UserMobileNavProps> = ({
                   setIsMoreMenuOpen(false);
                   onOpenAdminLogin();
                 }}
-                className="w-full py-3 px-3.5 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer min-h-[46px]"
+                className="w-full py-3.5 px-3.5 rounded-2xl bg-gradient-to-r from-emerald-700 to-teal-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer min-h-[46px] mt-2"
               >
                 <KeyRound className="w-4 h-4 text-amber-300" />
                 <span>Masuk Mode Admin Pengurus RT</span>

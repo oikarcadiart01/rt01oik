@@ -7,6 +7,7 @@ import {
   Complaint,
   RTAnnouncement,
   OfficialLetter,
+  EventDocumentation,
 } from './types';
 import {
   INITIAL_RESIDENTS,
@@ -16,9 +17,15 @@ import {
   INITIAL_COMPLAINTS,
   INITIAL_ANNOUNCEMENTS,
   INITIAL_LETTERS,
+  INITIAL_DOCUMENTATIONS,
 } from './data/initialData';
 import { UserPortal } from './components/user/UserPortal';
 import { AdminPortal } from './components/admin/AdminPortal';
+import {
+  testConnection,
+  subscribeCollection,
+  seedIfEmpty,
+} from './services/firebase';
 import { Check } from 'lucide-react';
 
 export default function App() {
@@ -49,7 +56,12 @@ export default function App() {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          const valid = parsed.filter(
+            (o: Official) => o && typeof o.nama === 'string' && o.nama.trim().length > 0
+          );
+          if (valid.length > 0) {
+            return valid;
+          }
         }
       } catch {
         // fallback
@@ -78,7 +90,106 @@ export default function App() {
     return saved ? JSON.parse(saved) : INITIAL_LETTERS;
   });
 
-  const [announcements] = useState<RTAnnouncement[]>(INITIAL_ANNOUNCEMENTS);
+  const [announcements, setAnnouncements] = useState<RTAnnouncement[]>(() => {
+    const saved = localStorage.getItem('rt01_announcements');
+    return saved ? JSON.parse(saved) : INITIAL_ANNOUNCEMENTS;
+  });
+
+  const [documentations, setDocumentations] = useState<EventDocumentation[]>(() => {
+    const saved = localStorage.getItem('rt01_documentation');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return INITIAL_DOCUMENTATIONS;
+  });
+
+  // Real-time Firestore Subscriptions & Seeding
+  useEffect(() => {
+    // Validate connection to Firestore
+    testConnection();
+
+    // Seed collections with initial rich demo data if cloud collection is empty
+    seedIfEmpty('residents', INITIAL_RESIDENTS);
+    seedIfEmpty('officials', INITIAL_OFFICIALS);
+    seedIfEmpty('transactions', INITIAL_TRANSACTIONS);
+    seedIfEmpty('events', INITIAL_EVENTS);
+    seedIfEmpty('complaints', INITIAL_COMPLAINTS);
+    seedIfEmpty('letters', INITIAL_LETTERS);
+    seedIfEmpty('announcements', INITIAL_ANNOUNCEMENTS);
+    seedIfEmpty('documentation', INITIAL_DOCUMENTATIONS);
+
+    // Subscribe to collections
+    const unsubResidents = subscribeCollection<Resident>('residents', data => {
+      if (data && data.length > 0) setResidents(data);
+    });
+
+    const unsubOfficials = subscribeCollection<Official>('officials', data => {
+      if (data && data.length > 0) {
+        const valid = data
+          .filter(o => o && typeof o.nama === 'string' && o.nama.trim().length > 0)
+          .sort((a, b) => (a.urutan || 99) - (b.urutan || 99));
+        if (valid.length > 0) setOfficials(valid);
+      }
+    });
+
+    const unsubTransactions = subscribeCollection<CashTransaction>('transactions', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime());
+        setTransactions(data);
+      }
+    });
+
+    const unsubEvents = subscribeCollection<CommunityEvent>('events', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime());
+        setEvents(data);
+      }
+    });
+
+    const unsubComplaints = subscribeCollection<Complaint>('complaints', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggalLapor).getTime() - new Date(a.tanggalLapor).getTime());
+        setComplaints(data);
+      }
+    });
+
+    const unsubLetters = subscribeCollection<OfficialLetter>('letters', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggalSurat).getTime() - new Date(a.tanggalSurat).getTime());
+        setLetters(data);
+      }
+    });
+
+    const unsubAnnounce = subscribeCollection<RTAnnouncement>('announcements', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime());
+        setAnnouncements(data);
+      }
+    });
+
+    const unsubDocs = subscribeCollection<EventDocumentation>('documentation', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime());
+        setDocumentations(data);
+      }
+    });
+
+    return () => {
+      unsubResidents();
+      unsubOfficials();
+      unsubTransactions();
+      unsubEvents();
+      unsubComplaints();
+      unsubLetters();
+      unsubAnnounce();
+      unsubDocs();
+    };
+  }, []);
 
   // Toast Notification
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -114,6 +225,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('rt01_letters', JSON.stringify(letters));
   }, [letters]);
+
+  useEffect(() => {
+    localStorage.setItem('rt01_documentation', JSON.stringify(documentations));
+  }, [documentations]);
 
   useEffect(() => {
     localStorage.setItem('rt01_admin_mode', String(isAdminMode));
@@ -173,6 +288,8 @@ export default function App() {
           setEvents={setEvents}
           setComplaints={setComplaints}
           setLetters={setLetters}
+          documentations={documentations}
+          setDocumentations={setDocumentations}
         />
       ) : (
         <UserPortal
@@ -181,7 +298,7 @@ export default function App() {
           events={events}
           residents={residents}
           saldoKas={saldoKas}
-          aduanAktif={activeComplaintsCount}
+          documentations={documentations}
           onLoginSuccess={handleLoginAdminSuccess}
         />
       )}

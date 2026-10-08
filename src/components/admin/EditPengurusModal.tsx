@@ -68,7 +68,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
         jabatan: '',
         blokRumah: 'Blok ',
         noHp: '08',
-        periode: '2024 - 2027',
+        periode: '2026 - 2031',
         fotoUrl: AVATAR_PRESETS[0].url,
       });
       setTupoksiList([
@@ -158,7 +158,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
         tupoksiList.length > 0
           ? tupoksiList
           : ['Melayani warga RT 01 RW 12 Cluster Arcadia.'],
-      periode: formData.periode || '2024 - 2027',
+      periode: formData.periode || '2026 - 2031',
       urutan: official ? official.urutan : nextOrder,
     };
 
@@ -387,7 +387,7 @@ export const EditPengurusModal: React.FC<EditPengurusModalProps> = ({
                 type="text"
                 value={formData.periode || ''}
                 onChange={e => setFormData({ ...formData, periode: e.target.value })}
-                placeholder="Contoh: 2024 - 2027"
+                placeholder="Contoh: 2026 - 2031"
                 className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium"
               />
             </div>

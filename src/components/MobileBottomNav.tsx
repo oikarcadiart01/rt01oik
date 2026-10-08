@@ -197,7 +197,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 </span>
                 <div>
                   <span className="text-xs font-bold block">Profil Wilayah</span>
-                  <span className="text-[10px] text-slate-500">Tata Tertib RT</span>
+                  <span className="text-[10px] text-slate-500">Peta & Fasilitas RT</span>
                 </div>
               </button>
 

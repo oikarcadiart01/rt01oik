@@ -9,6 +9,7 @@ import {
   OfficialLetter,
   ComplaintStatus,
   PaymentStatus,
+  EventDocumentation,
 } from '../../types';
 import { AdminHeaderBanner } from './AdminHeaderBanner';
 import { AdminNavbar, AdminNavTab } from './AdminNavbar';
@@ -27,6 +28,7 @@ import { INITIAL_OFFICIALS } from '../../data/initialData';
 import { AddWargaModal } from '../modals/AddWargaModal';
 import { AddTransaksiModal } from '../modals/AddTransaksiModal';
 import { AddPengaduanModal } from '../modals/AddPengaduanModal';
+import { saveDocument, deleteDocument } from '../../services/firebase';
 import { LogOut, Heart } from 'lucide-react';
 
 interface AdminPortalProps {
@@ -46,6 +48,8 @@ interface AdminPortalProps {
   setEvents: React.Dispatch<React.SetStateAction<CommunityEvent[]>>;
   setComplaints: React.Dispatch<React.SetStateAction<Complaint[]>>;
   setLetters: React.Dispatch<React.SetStateAction<OfficialLetter[]>>;
+  documentations: EventDocumentation[];
+  setDocumentations: React.Dispatch<React.SetStateAction<EventDocumentation[]>>;
 }
 
 export const AdminPortal: React.FC<AdminPortalProps> = ({
@@ -65,6 +69,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   setEvents,
   setComplaints,
   setLetters,
+  documentations,
+  setDocumentations,
 }) => {
   const [activeTab, setActiveTab] = useState<AdminNavTab>('beranda');
 
@@ -83,6 +89,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   // Handlers for Data Mutation
   const handleSaveResident = (res: Resident) => {
+    saveDocument('residents', res);
     if (residentToEdit) {
       setResidents(prev => prev.map(r => (r.id === res.id ? res : r)));
       showToast(`Data warga ${res.namaLengkap} berhasil diperbarui.`);
@@ -99,16 +106,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const handleDeleteResident = (id: string) => {
+    deleteDocument('residents', id);
     setResidents(prev => prev.filter(r => r.id !== id));
     showToast('Data warga berhasil dihapus.');
   };
 
   const handleSaveTransaction = (tx: CashTransaction) => {
+    saveDocument('transactions', tx);
     setTransactions(prev => [tx, ...prev]);
     showToast(`Transaksi kas ${tx.jenis} sebesar Rp ${tx.nominal.toLocaleString('id-ID')} berhasil dicatat.`);
   };
 
   const handleDeleteTransaction = (id: string) => {
+    deleteDocument('transactions', id);
     setTransactions(prev => prev.filter(t => t.id !== id));
     showToast('Transaksi kas berhasil dihapus.');
   };
@@ -119,6 +129,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     month: string
   ) => {
     const resident = residents.find(r => r.id === residentId);
+    if (resident) {
+      const updatedRes = { ...resident, statusIuran: newStatus, iuranTerakhirBulan: month };
+      saveDocument('residents', updatedRes);
+    }
     setResidents(prev =>
       prev.map(r =>
         r.id === residentId
@@ -137,6 +151,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         keterangan: `Pembayaran iuran ${resident.blokRumah} (${resident.namaLengkap}) bulan ${month}`,
         dicatatOleh: 'Bendahara RT 01',
       };
+      saveDocument('transactions', newTx);
       setTransactions(prev => [newTx, ...prev]);
       showToast(`Iuran ${resident.blokRumah} ditandai LUNAS dan dicatat ke Buku Kas RT.`);
     } else {
@@ -145,6 +160,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const handleSaveEvent = (ev: CommunityEvent) => {
+    saveDocument('events', ev);
     setEvents(prev => {
       const exists = prev.some(e => e.id === ev.id);
       if (exists) {
@@ -156,16 +172,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const handleDeleteEvent = (eventId: string) => {
+    deleteDocument('events', eventId);
     setEvents(prev => prev.filter(e => e.id !== eventId));
     showToast('Agenda kegiatan berhasil dihapus.');
   };
 
   const handleSaveComplaint = (cmp: Complaint) => {
+    saveDocument('complaints', cmp);
     setComplaints(prev => [cmp, ...prev]);
     showToast(`Laporan aduan #${cmp.tiketNo} berhasil dicatat.`);
   };
 
   const handleDeleteComplaint = (complaintId: string) => {
+    deleteDocument('complaints', complaintId);
     setComplaints(prev => prev.filter(c => c.id !== complaintId));
     showToast('Tiket aduan telah dihapus.');
   };
@@ -176,6 +195,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     tanggapan: string,
     petugas: string
   ) => {
+    const complaint = complaints.find(c => c.id === id);
+    if (complaint) {
+      const updatedCmp: Complaint = {
+        ...complaint,
+        status,
+        tanggapanPengurus: tanggapan,
+        petugasTindakLanjut: petugas,
+        tanggalSelesai:
+          status === 'Selesai'
+            ? new Date().toISOString().split('T')[0]
+            : complaint.tanggalSelesai,
+      };
+      saveDocument('complaints', updatedCmp);
+    }
     setComplaints(prev =>
       prev.map(c =>
         c.id === id
@@ -196,16 +229,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const handleSaveLetter = (letter: OfficialLetter) => {
+    saveDocument('letters', letter);
     setLetters(prev => [letter, ...prev]);
     showToast(`Surat Pengantar No. ${letter.nomorSurat} berhasil diterbitkan.`);
   };
 
   const handleDeleteLetter = (id: string) => {
+    deleteDocument('letters', id);
     setLetters(prev => prev.filter(l => l.id !== id));
     showToast('Arsip surat pengantar telah dihapus.');
   };
 
   const handleSaveOfficial = (updatedOfficial: Official) => {
+    saveDocument('officials', updatedOfficial);
     setOfficials(prev => {
       const exists = prev.some(o => o.id === updatedOfficial.id);
       if (exists) {
@@ -217,13 +253,33 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const handleDeleteOfficial = (id: string) => {
+    deleteDocument('officials', id);
     setOfficials(prev => prev.filter(o => o.id !== id));
     showToast('Pengurus RT berhasil dihapus.');
   };
 
   const handleResetOfficials = () => {
+    INITIAL_OFFICIALS.forEach(o => saveDocument('officials', o));
     setOfficials(INITIAL_OFFICIALS);
     showToast('Susunan pengurus RT berhasil dikembalikan ke standar awal.');
+  };
+
+  const handleSaveDocumentation = (docItem: EventDocumentation) => {
+    saveDocument('documentation', docItem);
+    setDocumentations(prev => {
+      const exists = prev.some(d => d.id === docItem.id);
+      if (exists) {
+        return prev.map(d => (d.id === docItem.id ? docItem : d));
+      }
+      return [docItem, ...prev];
+    });
+    showToast(`Folder dokumentasi "${docItem.folderName}" berhasil disimpan ke database.`);
+  };
+
+  const handleDeleteDocumentation = (id: string) => {
+    deleteDocument('documentation', id);
+    setDocumentations(prev => prev.filter(d => d.id !== id));
+    showToast('Folder dokumentasi kegiatan berhasil dihapus dari database.');
   };
 
   return (
@@ -317,6 +373,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             events={events}
             onSaveEvent={handleSaveEvent}
             onDeleteEvent={handleDeleteEvent}
+            documentations={documentations}
+            onSaveDocumentation={handleSaveDocumentation}
+            onDeleteDocumentation={handleDeleteDocumentation}
           />
         )}
 

@@ -76,7 +76,7 @@ export const AdminPengurusTab: React.FC<AdminPengurusTabProps> = ({
                 <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-3 py-0.5 rounded-full border border-emerald-300">
                   Kepengurusan Rukun Tetangga (Admin)
                 </span>
-                <span className="text-xs font-semibold text-slate-500">• Masa Bakti 2024 - 2027</span>
+                <span className="text-xs font-semibold text-slate-500">• Masa Bakti 2026 - 2031</span>
                 <span className="text-[10px] font-black uppercase tracking-wider bg-amber-400 text-slate-900 px-2.5 py-0.5 rounded-full">
                   Tambah • Edit • Hapus
                 </span>
@@ -482,7 +482,7 @@ export const AdminPengurusTab: React.FC<AdminPengurusTabProps> = ({
         <div className="bg-white rounded-3xl border border-emerald-100 shadow-sm overflow-hidden">
           <div className="p-4 sm:p-5 border-b border-emerald-100 flex items-center justify-between">
             <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
-              Daftar Seluruh Pengurus RT ({officials.length} Personel)
+              Daftar Seluruh Pengurus RT
             </h3>
             <button
               onClick={handleAddNewClick}

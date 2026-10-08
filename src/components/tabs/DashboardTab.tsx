@@ -465,7 +465,7 @@ export const DashboardTab: React.FC<DashboardTabProps> = ({
 
                 <div className="mt-3 p-3 rounded-2xl bg-amber-50 border border-amber-200/80 text-xs space-y-1">
                   <span className="font-bold text-amber-950 block">Ketua RT 01: Bambang Prasetyo, S.T.</span>
-                  <span className="text-slate-600 block text-[11px]">Blok A1 No. 02 • Masa Bakti 2024 - 2027</span>
+                  <span className="text-slate-600 block text-[11px]">Blok A1 No. 02 • Masa Bakti 2026 - 2031</span>
                 </div>
 
                 <button

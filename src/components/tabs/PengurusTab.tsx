@@ -35,7 +35,7 @@ export const PengurusTab: React.FC<PengurusTabProps> = ({ officials, isAdminMode
                 <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-100/90 px-3 py-0.5 rounded-full border border-emerald-300">
                   Kepengurusan Rukun Tetangga
                 </span>
-                <span className="text-xs font-semibold text-slate-500">• Masa Bakti 2024 - 2027</span>
+                <span className="text-xs font-semibold text-slate-500">• Masa Bakti 2026 - 2031</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
                 Struktur Organisasi Pengurus RT 01 RW 12

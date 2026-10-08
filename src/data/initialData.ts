@@ -1,4 +1,5 @@
-import { Resident, Official, CashTransaction, CommunityEvent, Complaint, RTAnnouncement, OfficialLetter } from '../types';
+import { Resident, Official, CashTransaction, CommunityEvent, Complaint, RTAnnouncement, OfficialLetter, EventDocumentation } from '../types';
+import { DOCUMENTATION_FOLDERS } from './dokumentasi';
 
 export const INITIAL_ANNOUNCEMENTS: RTAnnouncement[] = [
   {
@@ -35,7 +36,7 @@ export const INITIAL_RESIDENTS: Resident[] = [
     statusIuran: 'Lunas',
     iuranTerakhirBulan: 'Oktober 2026',
     tanggalMasuk: '2019-03-15',
-    catatan: 'Ketua RT 01 RW 12 Periode 2024-2027',
+    catatan: 'Ketua RT 01 RW 12 Periode 2026-2031',
     anggotaKeluarga: [
       { nama: 'Siti Aminah, S.Pd.', hubungan: 'Istri', usia: 41 },
       { nama: 'Rafi Aditya Prasetyo', hubungan: 'Anak', usia: 15 },
@@ -588,7 +589,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Mengambil keputusan strategis demi kenyamanan dan keamanan Cluster Arcadia.',
       'Menandatangani surat pengantar kependudukan (KTP/KK/Surat Domisili/Keterangan Tidak Mampu).',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 1,
   },
   {
@@ -603,7 +604,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Mengawasi efektivitas pelaksanaan program kerja seksi-seksi di bawah kepengurusan.',
       'Menjadi mediator penyelesaian masalah sosial atau perselisihan antar warga secara kekeluargaan.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 2,
   },
   {
@@ -619,7 +620,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Mengelola dan memelihara sistem portal digital RT 01 RW 12.',
       'Menerbitkan kartu kendali warga dan pengantar administrasi desa.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 3,
   },
   {
@@ -635,7 +636,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Menyusun laporan arus kas bulanan secara transparan dan akuntabel yang dipublikasikan di portal warga.',
       'Menyalurkan pembayaran honor petugas keamanan pos satpam dan petugas pengangkut sampah.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 4,
   },
   {
@@ -651,7 +652,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Berkolaborasi cepat dengan Babinsa & Polsek Sukorejo jika terjadi indikasi gangguan kamtibmas.',
       'Melakukan pengecekan berkala terhadap fungsi CCTV gerbang utama dan portal otomatis.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 5,
   },
   {
@@ -666,7 +667,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Mengawasi operasional pompa saluran air pembuangan dan sumur resapan pada musim hujan.',
       'Mendata inventaris RT seperti tenda, kursi lipat warga, sound system portable, dan mesin pemotong rumput.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 6,
   },
   {
@@ -681,7 +682,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Merawat taman hijau pintu masuk cluster, bundaran taman, dan penghijauan pohon peneduh.',
       'Menyelenggarakan kegiatan kerja bakti berkala dan program bank sampah pemilahan anorganik.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 7,
   },
   {
@@ -696,7 +697,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Mengelola komunikasi penyambutan bagi warga baru yang baru pindah masuk ke Cluster Arcadia.',
       'Menjenguk warga yang sedang sakit atau berduka serta mengkoordinir santunan dana sosial paguyuban.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 8,
   },
   {
@@ -711,7 +712,7 @@ export const INITIAL_OFFICIALS: Official[] = [
       'Menyelenggarakan senam pagi bersama di halaman taman setiap hari Minggu.',
       'Menggerakkan posyandu terpadu untuk balita dan lansia bekerjasama dengan Bidan Desa Suwayuwo.',
     ],
-    periode: '2024 - 2027',
+    periode: '2026 - 2031',
     urutan: 9,
   },
 ];
@@ -1123,3 +1124,7 @@ export const INITIAL_LETTERS: OfficialLetter[] = [
     ttdJabatan: 'Ketua RT 01 RW 12',
   },
 ];
+
+export const INITIAL_DOCUMENTATIONS: EventDocumentation[] = DOCUMENTATION_FOLDERS;
+
+

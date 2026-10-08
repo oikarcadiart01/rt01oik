@@ -4,9 +4,17 @@ import {
   Award,
   CalendarDays,
   Building2,
+  FileText,
+  PhoneCall,
 } from 'lucide-react';
 
-export type UserNavTab = 'beranda' | 'pengurus' | 'kegiatan' | 'profil';
+export type UserNavTab =
+  | 'beranda'
+  | 'pengurus'
+  | 'kegiatan'
+  | 'profil'
+  | 'tatatertib'
+  | 'darurat';
 
 interface UserNavbarProps {
   activeTab: UserNavTab;
@@ -49,6 +57,22 @@ export const UserNavbar: React.FC<UserNavbarProps> = ({
       color: 'from-blue-500 to-indigo-600',
       activeText: 'text-blue-700',
       iconColor: 'text-blue-600',
+    },
+    {
+      id: 'tatatertib' as UserNavTab,
+      label: 'Tata Tertib',
+      icon: FileText,
+      color: 'from-teal-600 to-emerald-600',
+      activeText: 'text-teal-700',
+      iconColor: 'text-teal-600',
+    },
+    {
+      id: 'darurat' as UserNavTab,
+      label: 'Nomor Darurat',
+      icon: PhoneCall,
+      color: 'from-rose-500 to-red-600',
+      activeText: 'text-rose-700',
+      iconColor: 'text-rose-600',
     },
   ];
 

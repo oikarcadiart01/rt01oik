@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pengurus RT: read by public, write by authenticated or open in community mode
+    match /officials/{officialId} {
+      allow read, write: if true;
+    }
+
+    // Warga / Residents
+    match /residents/{residentId} {
+      allow read, write: if true;
+    }
+
+    // Agenda Kegiatan Lingkungan
+    match /events/{eventId} {
+      allow read, write: if true;
+    }
+
+    // Kas & Transaksi Keuangan
+    match /transactions/{transactionId} {
+      allow read, write: if true;
+    }
+
+    // Pengaduan Warga
+    match /complaints/{complaintId} {
+      allow read, write: if true;
+    }
+
+    // Arsip Surat Pengantar
+    match /letters/{letterId} {
+      allow read, write: if true;
+    }
+
+    // Pengumuman RT
+    match /announcements/{announcementId} {
+      allow read, write: if true;
+    }
+
+    // Dokumentasi Foto Kegiatan RT
+    match /documentation/{docId} {
+      allow read, write: if true;
+    }
+
+    // Test connection doc
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}

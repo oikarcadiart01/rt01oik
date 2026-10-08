@@ -75,3 +75,43 @@ export function compressImageFile(
     reader.readAsDataURL(file);
   });
 }
+
+/**
+ * Batch compress an array of image files concurrently.
+ */
+export async function compressMultipleImages(
+  files: File[],
+  maxWidth = 800,
+  maxHeight = 800,
+  quality = 0.75
+): Promise<{ url: string; fileName: string }[]> {
+  const imageFiles = files.filter(f => f.type.startsWith('image/'));
+  const promises = imageFiles.map(async file => {
+    try {
+      const url = await compressImageFile(file, maxWidth, maxHeight, quality);
+      return { url, fileName: file.name };
+    } catch (err) {
+      console.warn(`Failed compressing ${file.name}, trying simple base64:`, err);
+      return new Promise<{ url: string; fileName: string }>((res, rej) => {
+        const fr = new FileReader();
+        fr.onload = () => res({ url: fr.result as string, fileName: file.name });
+        fr.onerror = () => rej(new Error(`Gagal membaca ${file.name}`));
+        fr.readAsDataURL(file);
+      });
+    }
+  });
+
+  return Promise.all(promises);
+}
+
+/**
+ * Generates folder name strictly following: nama kegiatan_tanggal
+ * e.g. "Kerja Bakti Akbar Bersama Warga_2026-06-15"
+ */
+export function formatDocumentationFolderName(kegiatanJudul: string, tanggal: string): string {
+  const cleanJudul = (kegiatanJudul || 'Kegiatan')
+    .trim()
+    .replace(/[/\\?%*:|"<>]/g, '-');
+  const cleanTanggal = (tanggal || new Date().toISOString().split('T')[0]).trim();
+  return `${cleanJudul}_${cleanTanggal}`;
+}

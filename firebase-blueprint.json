@@ -1,0 +1,170 @@
+{
+  "entities": {
+    "Official": {
+      "title": "Official",
+      "description": "Pengurus RT 01 RW 12 Cluster Arcadia",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "jabatan": { "type": "string" },
+        "nama": { "type": "string" },
+        "blokRumah": { "type": "string" },
+        "noHp": { "type": "string" },
+        "fotoUrl": { "type": "string" },
+        "periode": { "type": "string" },
+        "urutan": { "type": "number" }
+      },
+      "required": ["id", "jabatan", "nama"]
+    },
+    "Resident": {
+      "title": "Resident",
+      "description": "Data Warga / Kepala Keluarga RT 01 RW 12",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nik": { "type": "string" },
+        "noKk": { "type": "string" },
+        "namaLengkap": { "type": "string" },
+        "blokRumah": { "type": "string" },
+        "statusTinggal": { "type": "string" },
+        "jumlahAnggota": { "type": "number" },
+        "pekerjaan": { "type": "string" },
+        "noHp": { "type": "string" },
+        "statusIuran": { "type": "string" },
+        "iuranTerakhirBulan": { "type": "string" },
+        "tanggalMasuk": { "type": "string" }
+      },
+      "required": ["id", "namaLengkap", "blokRumah"]
+    },
+    "CommunityEvent": {
+      "title": "CommunityEvent",
+      "description": "Agenda Kegiatan Warga & Lingkungan RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "judul": { "type": "string" },
+        "deskripsi": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "waktu": { "type": "string" },
+        "lokasi": { "type": "string" },
+        "kategori": { "type": "string" },
+        "status": { "type": "string" },
+        "penanggungJawab": { "type": "string" },
+        "targetPeserta": { "type": "string" },
+        "fotoUrl": { "type": "string" }
+      },
+      "required": ["id", "judul", "tanggal", "lokasi"]
+    },
+    "CashTransaction": {
+      "title": "CashTransaction",
+      "description": "Buku Kas & Transaksi Keuangan RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "jenis": { "type": "string" },
+        "kategori": { "type": "string" },
+        "nominal": { "type": "number" },
+        "keterangan": { "type": "string" },
+        "dicatatOleh": { "type": "string" }
+      },
+      "required": ["id", "tanggal", "jenis", "nominal"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "Laporan Aduan dan Aspirasi Warga RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tiketNo": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "namaPelapor": { "type": "string" },
+        "blokRumah": { "type": "string" },
+        "kategori": { "type": "string" },
+        "judul": { "type": "string" },
+        "deskripsi": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "judul", "deskripsi"]
+    },
+    "OfficialLetter": {
+      "title": "OfficialLetter",
+      "description": "Arsip Surat Pengantar Resmi RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nomorSurat": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "namaWarga": { "type": "string" },
+        "keperluan": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["id", "nomorSurat", "namaWarga"]
+    },
+    "RTAnnouncement": {
+      "title": "RTAnnouncement",
+      "description": "Pengumuman Resmi Pengurus RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "judul": { "type": "string" },
+        "isi": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "prioritas": { "type": "string" },
+        "dibuatOleh": { "type": "string" }
+      },
+      "required": ["id", "judul", "isi", "tanggal"]
+    },
+    "EventDocumentation": {
+      "title": "EventDocumentation",
+      "description": "Folder Dokumentasi Foto Kegiatan RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "folderName": { "type": "string" },
+        "kegiatanJudul": { "type": "string" },
+        "tanggal": { "type": "string" },
+        "keterangan": { "type": "string" },
+        "lokasi": { "type": "string" },
+        "fotoList": { "type": "array" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "folderName", "kegiatanJudul", "tanggal"]
+    }
+  },
+  "firestore": {
+    "/officials/{officialId}": {
+      "schema": "Official",
+      "description": "Koleksi data susunan pengurus RT 01 RW 12"
+    },
+    "/residents/{residentId}": {
+      "schema": "Resident",
+      "description": "Koleksi data warga dan kepala keluarga"
+    },
+    "/events/{eventId}": {
+      "schema": "CommunityEvent",
+      "description": "Koleksi agenda kegiatan warga dan lingkungan"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "CashTransaction",
+      "description": "Koleksi buku kas dan transaksi keuangan RT"
+    },
+    "/complaints/{complaintId}": {
+      "schema": "Complaint",
+      "description": "Koleksi tiket pengaduan dan aspirasi warga"
+    },
+    "/letters/{letterId}": {
+      "schema": "OfficialLetter",
+      "description": "Koleksi arsip surat pengantar RT"
+    },
+    "/announcements/{announcementId}": {
+      "schema": "RTAnnouncement",
+      "description": "Koleksi pengumuman resmi RT"
+    },
+    "/documentation/{docId}": {
+      "schema": "EventDocumentation",
+      "description": "Koleksi folder dokumentasi kegiatan RT"
+    }
+  }
+}

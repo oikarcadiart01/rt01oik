@@ -165,3 +165,22 @@ export interface RTGuestLog {
   noHp: string;
   statusLapor: 'Sudah Lapor Satpam' | 'Sudah Lapor Pengurus RT' | 'Selesai';
 }
+
+export interface DocumentationPhoto {
+  id: string;
+  url: string; // Base64 data URL or image URL
+  caption?: string;
+  uploadedAt: string;
+}
+
+export interface EventDocumentation {
+  id: string;
+  folderName: string; // format: nama kegiatan_tanggal e.g. "Kerja Bakti Akbar Bersama Warga_2026-06-15"
+  kegiatanJudul: string;
+  tanggal: string; // YYYY-MM-DD
+  keterangan?: string;
+  lokasi?: string;
+  fotoList: DocumentationPhoto[];
+  createdAt: string;
+  updatedAt: string;
+}
