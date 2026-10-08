@@ -158,31 +158,28 @@ export const UserBerandaTab: React.FC<UserBerandaTabProps> = ({
             </div>
           </div>
 
-          {/* Card Bantuan Darurat Cepat */}
-          <div className="bg-gradient-to-br from-rose-50 to-red-50/80 rounded-3xl p-5 sm:p-6 border border-rose-200 text-xs space-y-3 shadow-sm">
+          {/* Card Panduan & Kerukunan Lingkungan */}
+          <div className="bg-gradient-to-br from-emerald-50 via-teal-50/60 to-white rounded-3xl p-5 sm:p-6 border border-emerald-200 text-xs space-y-3.5 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <span className="p-2.5 bg-gradient-to-br from-rose-500 to-red-600 text-white rounded-xl shadow-xs">
-                <PhoneCall className="w-5 h-5" />
+              <span className="p-2.5 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl shadow-xs">
+                <Sparkles className="w-5 h-5 text-amber-200" />
               </span>
               <div>
                 <h4 className="font-extrabold text-slate-900 text-sm">
-                  Pusat Kontak Cepat & Darurat
+                  Komitmen Paguyuban Warga
                 </h4>
-                <p className="text-[11px] text-slate-500">Polsek, Medis & Satpam Sukorejo</p>
+                <p className="text-[11px] text-slate-500">Kenyamanan & Keasrian Lingkungan</p>
               </div>
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed font-medium">
-              Butuh bantuan keamanan mendesak atau kendala fasilitas darurat di lingkungan Cluster Arcadia?
+              Mari bersama menjaga kerukunan, membuang sampah pada tempatnya, serta mematikan lampu teras saat siang hari demi efisiensi dan kebersihan cluster.
             </p>
 
-            <button
-              onClick={onOpenEmergency}
-              className="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer min-h-[44px]"
-            >
-              <PhoneCall className="w-4 h-4 animate-bounce" />
-              <span>Buka Nomor Darurat</span>
-            </button>
+            <div className="pt-1 border-t border-emerald-100 flex items-center justify-between text-[11px] text-emerald-800 font-bold">
+              <span>RT 01 RW 12 Cluster Arcadia</span>
+              <span className="text-slate-500 font-normal">Guyub & Rukun</span>
+            </div>
           </div>
         </div>
       </div>

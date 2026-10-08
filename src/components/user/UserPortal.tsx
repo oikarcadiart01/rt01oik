@@ -5,6 +5,10 @@ import {
   CommunityEvent,
   Resident,
   EventDocumentation,
+  EmergencyContact,
+  TataTertibRule,
+  ProfilWilayahInfo,
+  AreaFacilityPhoto,
 } from '../../types';
 import { UserHeaderBanner } from './UserHeaderBanner';
 import { UserNavbar, UserNavTab } from './UserNavbar';
@@ -26,6 +30,10 @@ interface UserPortalProps {
   residents: Resident[];
   saldoKas: number;
   documentations?: EventDocumentation[];
+  emergencyContacts?: EmergencyContact[];
+  tataTertibList?: TataTertibRule[];
+  profilInfo?: ProfilWilayahInfo;
+  areaPhotos?: AreaFacilityPhoto[];
   onLoginSuccess: () => void;
 }
 
@@ -36,6 +44,10 @@ export const UserPortal: React.FC<UserPortalProps> = ({
   residents,
   saldoKas,
   documentations = [],
+  emergencyContacts = [],
+  tataTertibList = [],
+  profilInfo,
+  areaPhotos,
   onLoginSuccess,
 }) => {
   const [activeTab, setActiveTab] = useState<UserNavTab>('beranda');
@@ -72,15 +84,15 @@ export const UserPortal: React.FC<UserPortalProps> = ({
         )}
 
         {activeTab === 'profil' && (
-          <UserProfilTab />
+          <UserProfilTab profilInfo={profilInfo} areaPhotos={areaPhotos} />
         )}
 
         {activeTab === 'tatatertib' && (
-          <TataTertibTab />
+          <TataTertibTab rules={tataTertibList} />
         )}
 
         {activeTab === 'darurat' && (
-          <NomorDaruratTab />
+          <NomorDaruratTab contacts={emergencyContacts} />
         )}
       </main>
 
@@ -109,6 +121,7 @@ export const UserPortal: React.FC<UserPortalProps> = ({
       <EmergencyModal
         isOpen={isEmergencyOpen}
         onClose={() => setIsEmergencyOpen(false)}
+        contacts={emergencyContacts}
       />
 
       <AdminLoginModal

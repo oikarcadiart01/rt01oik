@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { AreaFacilityPhoto } from '../../types';
+import { INITIAL_AREA_PHOTOS } from '../../data/initialData';
 import {
   MapPin,
   Navigation,
@@ -12,61 +14,14 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 
-interface AreaPhoto {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  imageUrl: string;
+interface ProfilAreaSectionProps {
+  photos?: AreaFacilityPhoto[];
 }
 
-const AREA_PHOTOS: AreaPhoto[] = [
-  {
-    id: 'area-1',
-    title: 'Gerbang Utama One-Gate System',
-    category: 'Keamanan Lingkungan',
-    description: 'Pintu gerbang utama Cluster Arcadia dilengkapi portal otomatis dan pos satpam untuk pemeriksaan tamu 24 jam.',
-    imageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'area-2',
-    title: 'Pos Satpam & Penjagaan 24 Jam',
-    category: 'Fasilitas Keamanan',
-    description: 'Petugas keamanan bersiaga penuh menjaga kenyamanan keluarga dan ketertiban lalu lintas kendaraan cluster.',
-    imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'area-3',
-    title: 'Taman Bundaran & Gazebo Warga',
-    category: 'Ruang Terbuka Hijau',
-    description: 'Pusat ruang hijau asri di bundaran utama dengan gazebo santai untuk interaksi warga dan bermain anak.',
-    imageUrl: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=800&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'area-4',
-    title: 'Jalan Lingkungan Paving Blok A & B',
-    category: 'Infrastruktur Jalan',
-    description: 'Jalan lingkungan paving block yang lebar, bersih, bebas genangan, dan tertata rapi dengan pepohonan peneduh.',
-    imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'area-5',
-    title: 'Penerangan Jalan Umum (PJU) Mandiri',
-    category: 'Fasilitas Umum',
-    description: 'Lampu LED hemat energi dipasang di setiap sudut jalan blok untuk menjamin keselamatan saat malam hari.',
-    imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80',
-  },
-  {
-    id: 'area-6',
-    title: 'Saluran Drainase & Resapan Air',
-    category: 'Kebersihan & Sanitasi',
-    description: 'Sistem selokan tertutup dan drainase resapan yang rutin dibersihkan secara gotong royong agar bebas banjir.',
-    imageUrl: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=800&auto=format&fit=crop&q=80',
-  },
-];
-
-export const ProfilAreaSection: React.FC = () => {
-  const [selectedPhoto, setSelectedPhoto] = useState<AreaPhoto | null>(null);
+export const ProfilAreaSection: React.FC<ProfilAreaSectionProps> = ({
+  photos = INITIAL_AREA_PHOTOS,
+}) => {
+  const [selectedPhoto, setSelectedPhoto] = useState<AreaFacilityPhoto | null>(null);
 
   // Maps coordinates and URL
   const gmapsQuery = encodeURIComponent(
@@ -101,13 +56,13 @@ export const ProfilAreaSection: React.FC = () => {
           </div>
 
           <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 self-start sm:self-auto">
-            {AREA_PHOTOS.length} Titik Area Terdata
+            {photos.length} Titik Area Terdata
           </span>
         </div>
 
         {/* Grid Foto Dokumentasi Area */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {AREA_PHOTOS.map(photo => (
+          {photos.map(photo => (
             <div
               key={photo.id}
               onClick={() => setSelectedPhoto(photo)}

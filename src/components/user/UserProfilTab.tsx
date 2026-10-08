@@ -1,8 +1,18 @@
 import React from 'react';
+import { ProfilWilayahInfo, AreaFacilityPhoto } from '../../types';
+import { INITIAL_PROFIL_WILAYAH, INITIAL_AREA_PHOTOS } from '../../data/initialData';
 import { ProfilAreaSection } from '../common/ProfilAreaSection';
 import { MapPin } from 'lucide-react';
 
-export const UserProfilTab: React.FC = () => {
+interface UserProfilTabProps {
+  profilInfo?: ProfilWilayahInfo;
+  areaPhotos?: AreaFacilityPhoto[];
+}
+
+export const UserProfilTab: React.FC<UserProfilTabProps> = ({
+  profilInfo = INITIAL_PROFIL_WILAYAH,
+  areaPhotos = INITIAL_AREA_PHOTOS,
+}) => {
   return (
     <div className="space-y-6">
       {/* Header Profile - Radiant Emerald & Sky Gradient */}
@@ -10,13 +20,13 @@ export const UserProfilTab: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <span className="px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs inline-block">
-              Profil Lingkungan & Wilayah
+              {profilInfo.subJudul || 'Profil Lingkungan & Wilayah'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-950">
-              RT 01 RW 12 Cluster Arcadia
+              {profilInfo.namaWilayah || 'RT 01 RW 12 Cluster Arcadia'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-2xl">
-              Perumahan Oma Indah Kapuk, Desa Suwayuwo, Kecamatan Sukorejo, Kabupaten Pasuruan, Jawa Timur (Kode Pos 67161)
+              {profilInfo.alamatLengkap}
             </p>
           </div>
 
@@ -26,47 +36,33 @@ export const UserProfilTab: React.FC = () => {
             </div>
             <div className="text-xs">
               <span className="font-extrabold text-slate-900 block text-xs sm:text-sm">Akses Strategis:</span>
-              <span className="text-slate-600 font-medium">Poros Surabaya - Malang KM 48 Sukorejo</span>
+              <span className="text-slate-600 font-medium">{profilInfo.aksesStrategis}</span>
             </div>
           </div>
         </div>
 
         <div className="mt-6 pt-6 border-t border-emerald-200/70 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-emerald-100 shadow-2xs space-y-1.5">
-            <span className="font-extrabold text-slate-900 block text-sm flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              Blok Hunian
-            </span>
-            <p className="text-slate-600 leading-relaxed font-medium">
-              Terdiri dari 4 Blok (Blok A, Blok B, Blok C, Blok D) dengan total lebih dari 45 unit rumah hunian berkonsep klaster asri dan modern.
-            </p>
-          </div>
-
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-teal-100 shadow-2xs space-y-1.5">
-            <span className="font-extrabold text-slate-900 block text-sm flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
-              Fasilitas Bersama
-            </span>
-            <p className="text-slate-600 leading-relaxed font-medium">
-              Gerbang One-Gate System dengan Pos Satpam 24 Jam, Taman Bundaran, Balai/Gazebo Warga, Lampu PJU mandiri, dan Saluran Drainase Resapan.
-            </p>
-          </div>
-
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-sky-100 shadow-2xs space-y-1.5">
-            <span className="font-extrabold text-slate-900 block text-sm flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
-              Prinsip Paguyuban
-            </span>
-            <p className="text-slate-600 leading-relaxed font-medium">
-              Mengedepankan asas kekeluargaan, kegotongroyongan, transparansi pengelolaan kas, serta kenyamanan dan keamanan bagi seluruh penghuni.
-            </p>
-          </div>
+          {profilInfo.pilarList?.map(pilar => (
+            <div
+              key={pilar.id}
+              className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-emerald-100 shadow-2xs space-y-1.5"
+            >
+              <span className="font-extrabold text-slate-900 block text-sm flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                {pilar.judul}
+              </span>
+              <p className="text-slate-600 leading-relaxed font-medium">
+                {pilar.deskripsi}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Foto Dokumentasi Area RT 01 & Peta Maps Interaktif */}
-      <ProfilAreaSection />
+      <ProfilAreaSection photos={areaPhotos} />
     </div>
   );
 };
+
 

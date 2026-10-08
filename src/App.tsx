@@ -8,6 +8,10 @@ import {
   RTAnnouncement,
   OfficialLetter,
   EventDocumentation,
+  EmergencyContact,
+  TataTertibRule,
+  ProfilWilayahInfo,
+  AreaFacilityPhoto,
 } from './types';
 import {
   INITIAL_RESIDENTS,
@@ -18,6 +22,10 @@ import {
   INITIAL_ANNOUNCEMENTS,
   INITIAL_LETTERS,
   INITIAL_DOCUMENTATIONS,
+  INITIAL_EMERGENCY_CONTACTS,
+  INITIAL_TATATERTIB_RULES,
+  INITIAL_PROFIL_WILAYAH,
+  INITIAL_AREA_PHOTOS,
 } from './data/initialData';
 import { UserPortal } from './components/user/UserPortal';
 import { AdminPortal } from './components/admin/AdminPortal';
@@ -108,6 +116,58 @@ export default function App() {
     return INITIAL_DOCUMENTATIONS;
   });
 
+  const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>(() => {
+    const saved = localStorage.getItem('rt01_emergency_contacts');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return INITIAL_EMERGENCY_CONTACTS;
+  });
+
+  const [tataTertibList, setTataTertibList] = useState<TataTertibRule[]>(() => {
+    const saved = localStorage.getItem('rt01_tatatertib');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return INITIAL_TATATERTIB_RULES;
+  });
+
+  const [profilInfo, setProfilInfo] = useState<ProfilWilayahInfo>(() => {
+    const saved = localStorage.getItem('rt01_profil_wilayah');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object' && parsed.namaWilayah) return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return INITIAL_PROFIL_WILAYAH;
+  });
+
+  const [areaPhotos, setAreaPhotos] = useState<AreaFacilityPhoto[]>(() => {
+    const saved = localStorage.getItem('rt01_area_photos');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch {
+        // fallback
+      }
+    }
+    return INITIAL_AREA_PHOTOS;
+  });
+
   // Real-time Firestore Subscriptions & Seeding
   useEffect(() => {
     // Validate connection to Firestore
@@ -122,6 +182,10 @@ export default function App() {
     seedIfEmpty('letters', INITIAL_LETTERS);
     seedIfEmpty('announcements', INITIAL_ANNOUNCEMENTS);
     seedIfEmpty('documentation', INITIAL_DOCUMENTATIONS);
+    seedIfEmpty('emergency_contacts', INITIAL_EMERGENCY_CONTACTS);
+    seedIfEmpty('tatatertib', INITIAL_TATATERTIB_RULES);
+    seedIfEmpty('profil_wilayah', [INITIAL_PROFIL_WILAYAH]);
+    seedIfEmpty('area_facilities', INITIAL_AREA_PHOTOS);
 
     // Subscribe to collections
     const unsubResidents = subscribeCollection<Resident>('residents', data => {
@@ -179,6 +243,33 @@ export default function App() {
       }
     });
 
+    const unsubEmergency = subscribeCollection<EmergencyContact>('emergency_contacts', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => (a.urutan || 99) - (b.urutan || 99));
+        setEmergencyContacts(data);
+      }
+    });
+
+    const unsubRules = subscribeCollection<TataTertibRule>('tatatertib', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => a.pasal - b.pasal);
+        setTataTertibList(data);
+      }
+    });
+
+    const unsubProfil = subscribeCollection<ProfilWilayahInfo>('profil_wilayah', data => {
+      if (data && data.length > 0) {
+        setProfilInfo(data[0]);
+      }
+    });
+
+    const unsubAreaPhotos = subscribeCollection<AreaFacilityPhoto>('area_facilities', data => {
+      if (data && data.length > 0) {
+        data.sort((a, b) => (a.urutan || 99) - (b.urutan || 99));
+        setAreaPhotos(data);
+      }
+    });
+
     return () => {
       unsubResidents();
       unsubOfficials();
@@ -188,6 +279,10 @@ export default function App() {
       unsubLetters();
       unsubAnnounce();
       unsubDocs();
+      unsubEmergency();
+      unsubRules();
+      unsubProfil();
+      unsubAreaPhotos();
     };
   }, []);
 
@@ -227,8 +322,28 @@ export default function App() {
   }, [letters]);
 
   useEffect(() => {
+    localStorage.setItem('rt01_announcements', JSON.stringify(announcements));
+  }, [announcements]);
+
+  useEffect(() => {
     localStorage.setItem('rt01_documentation', JSON.stringify(documentations));
   }, [documentations]);
+
+  useEffect(() => {
+    localStorage.setItem('rt01_emergency_contacts', JSON.stringify(emergencyContacts));
+  }, [emergencyContacts]);
+
+  useEffect(() => {
+    localStorage.setItem('rt01_tatatertib', JSON.stringify(tataTertibList));
+  }, [tataTertibList]);
+
+  useEffect(() => {
+    localStorage.setItem('rt01_profil_wilayah', JSON.stringify(profilInfo));
+  }, [profilInfo]);
+
+  useEffect(() => {
+    localStorage.setItem('rt01_area_photos', JSON.stringify(areaPhotos));
+  }, [areaPhotos]);
 
   useEffect(() => {
     localStorage.setItem('rt01_admin_mode', String(isAdminMode));
@@ -282,6 +397,7 @@ export default function App() {
           saldoKas={saldoKas}
           onLogoutAdmin={handleLogoutAdmin}
           showToast={showToast}
+          setAnnouncements={setAnnouncements}
           setResidents={setResidents}
           setOfficials={setOfficials}
           setTransactions={setTransactions}
@@ -290,6 +406,14 @@ export default function App() {
           setLetters={setLetters}
           documentations={documentations}
           setDocumentations={setDocumentations}
+          emergencyContacts={emergencyContacts}
+          setEmergencyContacts={setEmergencyContacts}
+          tataTertibList={tataTertibList}
+          setTataTertibList={setTataTertibList}
+          profilInfo={profilInfo}
+          setProfilInfo={setProfilInfo}
+          areaPhotos={areaPhotos}
+          setAreaPhotos={setAreaPhotos}
         />
       ) : (
         <UserPortal
@@ -299,6 +423,10 @@ export default function App() {
           residents={residents}
           saldoKas={saldoKas}
           documentations={documentations}
+          emergencyContacts={emergencyContacts}
+          tataTertibList={tataTertibList}
+          profilInfo={profilInfo}
+          areaPhotos={areaPhotos}
           onLoginSuccess={handleLoginAdminSuccess}
         />
       )}

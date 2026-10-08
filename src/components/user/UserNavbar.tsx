@@ -77,7 +77,7 @@ export const UserNavbar: React.FC<UserNavbarProps> = ({
   ];
 
   return (
-    <nav className="bg-white/95 border-b border-emerald-100/90 sticky top-0 z-40 shadow-xs backdrop-blur-md">
+    <nav className="hidden md:block bg-white/95 border-b border-emerald-100/90 sticky top-0 z-40 shadow-xs backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto py-2.5 scrollbar-none touch-pan-x">
           {navItems.map(item => {

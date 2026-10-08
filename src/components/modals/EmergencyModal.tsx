@@ -1,13 +1,19 @@
 import React from 'react';
 import { EMERGENCY_CONTACTS } from '../../data/initialData';
+import { EmergencyContact } from '../../types';
 import { X, PhoneCall, ShieldAlert, AlertOctagon } from 'lucide-react';
 
 interface EmergencyModalProps {
   isOpen: boolean;
   onClose: () => void;
+  contacts?: EmergencyContact[];
 }
 
-export const EmergencyModal: React.FC<EmergencyModalProps> = ({ isOpen, onClose }) => {
+export const EmergencyModal: React.FC<EmergencyModalProps> = ({
+  isOpen,
+  onClose,
+  contacts = EMERGENCY_CONTACTS,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -42,7 +48,7 @@ export const EmergencyModal: React.FC<EmergencyModalProps> = ({ isOpen, onClose 
           </div>
 
           <div className="divide-y divide-slate-100">
-            {EMERGENCY_CONTACTS.map((item, index) => (
+            {contacts.map((item, index) => (
               <div
                 key={index}
                 className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 px-2 rounded-lg transition-colors"

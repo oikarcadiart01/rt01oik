@@ -110,7 +110,7 @@ export interface RTAnnouncement {
   judul: string;
   isi: string;
   tanggal: string;
-  prioritas: 'Normal' | 'Penting' | 'Darurat';
+  prioritas: 'Normal' | 'Penting' | 'Darurat' | 'Biasa';
   dibuatOleh: string;
 }
 
@@ -184,3 +184,50 @@ export interface EventDocumentation {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface EmergencyContact {
+  id: string;
+  nama: string;
+  nomor: string;
+  keterangan: string;
+  kategori: string;
+  urutan?: number;
+}
+
+export interface TataTertibRule {
+  id: string;
+  pasal: number;
+  judul: string;
+  kategori: string;
+  deskripsiSingkat?: string;
+  items: string[];
+  urutan?: number;
+}
+
+export interface ProfilPilarItem {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  warnaAksen?: string;
+}
+
+export interface ProfilWilayahInfo {
+  id: string;
+  namaWilayah: string;
+  subJudul: string;
+  alamatLengkap: string;
+  aksesStrategis: string;
+  deskripsiUmum: string;
+  pilarList: ProfilPilarItem[];
+  updatedAt?: string;
+}
+
+export interface AreaFacilityPhoto {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  imageUrl: string;
+  urutan?: number;
+}
+

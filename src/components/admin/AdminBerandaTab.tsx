@@ -134,6 +134,14 @@ export const AdminBerandaTab: React.FC<AdminBerandaTabProps> = ({
                   </p>
                 </div>
               </div>
+
+              <button
+                onClick={() => setActiveTab('pengumuman')}
+                className="text-xs font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-xl border border-amber-200 transition-colors cursor-pointer flex items-center gap-1.5 shrink-0"
+              >
+                <span>Kelola Pengumuman</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
 
             <div className="space-y-3.5">

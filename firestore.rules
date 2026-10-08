@@ -41,6 +41,26 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
+    // Nomor Darurat Lingkungan
+    match /emergency_contacts/{contactId} {
+      allow read, write: if true;
+    }
+
+    // Tata Tertib & Peraturan Warga
+    match /tatatertib/{ruleId} {
+      allow read, write: if true;
+    }
+
+    // Profil Wilayah & Lingkungan
+    match /profil_wilayah/{profilId} {
+      allow read, write: if true;
+    }
+
+    // Dokumentasi Fasilitas Area
+    match /area_facilities/{photoId} {
+      allow read, write: if true;
+    }
+
     // Test connection doc
     match /test/{docId} {
       allow read, write: if true;

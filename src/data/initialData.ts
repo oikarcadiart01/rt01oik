@@ -1,4 +1,17 @@
-import { Resident, Official, CashTransaction, CommunityEvent, Complaint, RTAnnouncement, OfficialLetter, EventDocumentation } from '../types';
+import {
+  Resident,
+  Official,
+  CashTransaction,
+  CommunityEvent,
+  Complaint,
+  RTAnnouncement,
+  OfficialLetter,
+  EventDocumentation,
+  EmergencyContact,
+  TataTertibRule,
+  ProfilWilayahInfo,
+  AreaFacilityPhoto,
+} from '../types';
 import { DOCUMENTATION_FOLDERS } from './dokumentasi';
 
 export const INITIAL_ANNOUNCEMENTS: RTAnnouncement[] = [
@@ -1017,60 +1030,167 @@ export const INITIAL_COMPLAINTS: Complaint[] = [
   },
 ];
 
-export const EMERGENCY_CONTACTS = [
+export const INITIAL_EMERGENCY_CONTACTS: EmergencyContact[] = [
   {
+    id: 'emg-1',
     nama: 'Pos Satpam Cluster Arcadia (24 Jam)',
     nomor: '0812-3456-7899',
     keterangan: 'Petugas jaga gerbang utama & portal darurat perumahan',
     kategori: 'Keamanan Lingkungan',
+    urutan: 1,
   },
   {
+    id: 'emg-2',
     nama: 'Ketua RT 01 (Bpk. Bambang Prasetyo)',
     nomor: '0812-3456-7890',
     keterangan: 'Ketua Paguyuban RT 01 RW 12 Cluster Arcadia',
     kategori: 'Pengurus RT',
+    urutan: 2,
   },
   {
+    id: 'emg-3',
     nama: 'Bhabinkamtibmas Desa Suwayuwo',
     nomor: '0813-5566-7788',
     keterangan: 'Aipda Heri / Polsek Sukorejo Pasuruan',
-    kategori: 'Kepolisian',
+    kategori: 'Keamanan & Polisi',
+    urutan: 3,
   },
   {
+    id: 'emg-4',
     nama: 'Babinsa Koramil 0819/23 Sukorejo',
     nomor: '0821-4433-2211',
     keterangan: 'Serka Mulyono / Koramil Sukorejo',
-    kategori: 'TNI / Keamanan',
+    kategori: 'Keamanan & Polisi',
+    urutan: 4,
   },
   {
+    id: 'emg-5',
     nama: 'Polsek Sukorejo Pasuruan',
     nomor: '(0343) 611110',
     keterangan: 'Jl. Raya Surabaya - Malang KM 48 Sukorejo',
-    kategori: 'Kepolisian',
+    kategori: 'Keamanan & Polisi',
+    urutan: 5,
   },
   {
+    id: 'emg-6',
     nama: 'Puskesmas Sukorejo Pasuruan (IGD 24 Jam)',
     nomor: '(0343) 611234',
     keterangan: 'Pelayanan gawat darurat medis & ambulans',
-    kategori: 'Kesehatan / Medis',
+    kategori: 'Medis & Ambulans',
+    urutan: 6,
   },
   {
+    id: 'emg-7',
     nama: 'Kantor Balai Desa Suwayuwo',
     nomor: '(0343) 612555',
     keterangan: 'Pemerintah Desa Suwayuwo, Kec. Sukorejo',
-    kategori: 'Pemerintahan',
+    kategori: 'Utilitas & Desa',
+    urutan: 7,
   },
   {
+    id: 'emg-8',
     nama: 'Pemadam Kebakaran (Damkar) Kab. Pasuruan',
     nomor: '(0343) 424113 / 112',
     keterangan: 'Pos Siaga Damkar Wilayah Barat',
-    kategori: 'Darurat Kebakaran',
+    kategori: 'Pemadam & SAR',
+    urutan: 8,
   },
   {
+    id: 'emg-9',
     nama: 'PLN Rayon Pandaan / Sukorejo',
     nomor: '123 / (0343) 631123',
     keterangan: 'Gangguan jaringan listrik PLN & PJU',
-    kategori: 'Utilitas',
+    kategori: 'Utilitas & Desa',
+    urutan: 9,
+  },
+];
+
+export const EMERGENCY_CONTACTS = INITIAL_EMERGENCY_CONTACTS;
+
+export const INITIAL_TATATERTIB_RULES: TataTertibRule[] = [
+  {
+    id: 'rule-1',
+    pasal: 1,
+    judul: 'Keamanan & Ketertiban Tamu',
+    kategori: 'Keamanan & Ketertiban',
+    deskripsiSingkat: 'Prosedur satu gerbang (one-gate system), identitas tamu, dan kewajiban lapor tamu menginap.',
+    items: [
+      'Pintu gerbang utama (One-Gate System) portal otomatis ditutup pada pukul 22.00 s.d. 05.00 WIB demi keamanan cluster.',
+      'Tamu atau kerabat yang berkunjung dan menginap lebih dari 1x24 jam wajib melapor ke Pos Satpam atau Pengurus RT melalui Formulir Tamu Menginap.',
+      'Tamu yang memasuki cluster wajib menitipkan identitas (KTP/SIM) di Pos Satpam apabila berkunjung di atas pukul 22.00 WIB.',
+      'Bagi penghuni baru (warga tetap maupun kontrak/sewa) wajib melapor 1x24 jam kepada Ketua RT dengan menyerahkan fotokopi KTP dan Kartu Keluarga (KK).',
+    ],
+    urutan: 1,
+  },
+  {
+    id: 'rule-2',
+    pasal: 2,
+    judul: 'Kebersihan Lingkungan & Pengelolaan Sampah',
+    kategori: 'Kebersihan Lingkungan',
+    deskripsiSingkat: 'Pengelolaan tempat sampah tertutup, jadwal pembuangan, larangan pembakaran sampah, dan kerja bakti.',
+    items: [
+      'Setiap rumah wajib menyediakan tempat sampah bertutup di halaman/depan pagar masing-masing agar tidak diacak hewan liar.',
+      'Jadwal pengambilan sampah rumah tangga oleh petugas desa dilakukan secara rutin setiap hari Selasa, Kamis, dan Sabtu pagi.',
+      'Dilarang keras membakar sampah di pekarangan rumah atau jalan cluster yang menimbulkan polusi asap dan mengganggu tetangga.',
+      'Warga diharapkan aktif mengikuti kegiatan gotong royong kerja bakti massal kebersihan saluran air drainase lingkungan secara berkala.',
+    ],
+    urutan: 2,
+  },
+  {
+    id: 'rule-3',
+    pasal: 3,
+    judul: 'Jam Tenang & Renovasi Bangunan',
+    kategori: 'Kenyamanan Hunian',
+    deskripsiSingkat: 'Ketentuan jam istirahat malam, izin pekerjaan konstruksi bising, dan penataan material bangunan.',
+    items: [
+      'Jam tenang lingkungan berlaku mulai pukul 22.00 s.d. 06.00 WIB. Hindari aktivitas yang menimbulkan kebisingan tinggi pada jam istirahat.',
+      'Pekerjaan renovasi rumah (tukang, pembongkaran, pemotongan keramik) hanya diizinkan pada hari Senin s.d. Sabtu pukul 08.00 - 17.00 WIB (Hari Minggu libur kerja berisik).',
+      'Penumpukan material bangunan (pasir, batu bata, adukan semen) tidak boleh menghalangi akses jalan warga lain dan wajib dibersihkan maksimal 3 hari setelah diturunkan.',
+      'Renovasi yang memerlukan penutupan separuh jalan wajib meminta izin kepada Pengurus RT dan berkoordinasi dengan tetangga kanan-kiri.',
+    ],
+    urutan: 3,
+  },
+  {
+    id: 'rule-4',
+    pasal: 4,
+    judul: 'Kewajiban Iuran Bulanan Paguyuban',
+    kategori: 'Keuangan & Fasilitas',
+    deskripsiSingkat: 'Besaran iuran kas paguyuban per KK, peruntukan operasional, tenggat waktu, dan transparansi laporan kas.',
+    items: [
+      'Setiap Kepala Keluarga (KK) / unit rumah berpenghuni berkewajiban membayar iuran bulanan paguyuban sebesar Rp 100.000 / KK / Bulan.',
+      'Iuran bulanan mencakup gaji satpam pos jaga 24 jam, retribusi sampah desa, penerangan jalan umum (listrik token PJU), perawatan taman & dana sosial warga.',
+      'Pembayaran dilakukan paling lambat tanggal 10 setiap bulannya kepada Bendahara RT secara tunai atau transfer rekening kas RT.',
+      'Laporan pembukuan kas bulanan dipublikasikan secara transparan 100% dan dapat dipantau oleh seluruh warga melalui portal RT.',
+    ],
+    urutan: 4,
+  },
+  {
+    id: 'rule-5',
+    pasal: 5,
+    judul: 'Ketertiban Parkir & Batas Kecepatan',
+    kategori: 'Lalu Lintas Lingkungan',
+    deskripsiSingkat: 'Batas kecepatan kendaraan 20 km/jam, penempatan mobil di carport, dan larangan parkir di tikungan/portal.',
+    items: [
+      'Batas kecepatan berkendara seluruh kendaraan bermotor di dalam area cluster maksimal 20 km/jam demi keselamatan anak-anak dan pejalan kaki.',
+      'Kendaraan mobil pribadi diutamakan diparkir di dalam carport atau garasi rumah masing-masing agar tidak mempersempit akses manuver jalan tetangga.',
+      'Dilarang memarkir kendaraan di tikungan tajam, depan hidran/portal, atau tepat di depan gerbang pagar rumah warga lain tanpa izin.',
+      'Kendaraan tamu yang menginap wajib diparkir dengan rapi dan berkoordinasi dengan petugas keamanan Pos Satpam.',
+    ],
+    urutan: 5,
+  },
+  {
+    id: 'rule-6',
+    pasal: 6,
+    judul: 'Kerukunan & Fasilitas Bersama',
+    kategori: 'Sosial & Fasilitas Umum',
+    deskripsiSingkat: 'Toleransi antarwarga, penertiban hewan peliharaan, serta pemanfaatan gazebo dan perlengkapan RT.',
+    items: [
+      'Warga saling menghormati perbedaan suku, agama, dan budaya serta menjunjung tinggi asas musyawarah untuk mufakat dalam menyelesaikan perbedaan.',
+      'Warga yang memelihara hewan peliharaan (kucing, anjing, burung) wajib menjaga kebersihan dan tidak membiarkan kotoran hewan di jalan umum atau halaman tetangga.',
+      'Penggunaan fasilitas bersama seperti Gazebo Warga, Bundaran Taman, dan inventaris RT (tenda, sound system, kursi) dikoordinasikan terlebih dahulu ke Pengurus RT.',
+      'Warga yang akan mengadakan acara hajatan/syukuran yang berpotensi ramai dimohon menyampaikan pemberitahuan ke tetangga sekitar dan Pengurus RT.',
+    ],
+    urutan: 6,
   },
 ];
 
@@ -1126,5 +1246,86 @@ export const INITIAL_LETTERS: OfficialLetter[] = [
 ];
 
 export const INITIAL_DOCUMENTATIONS: EventDocumentation[] = DOCUMENTATION_FOLDERS;
+
+export const INITIAL_PROFIL_WILAYAH: ProfilWilayahInfo = {
+  id: 'profil-arcadia-rt01',
+  namaWilayah: 'RT 01 RW 12 Cluster Arcadia',
+  subJudul: 'Profil Lingkungan & Wilayah',
+  alamatLengkap: 'Perumahan Oma Indah Kapuk, Desa Suwayuwo, Kecamatan Sukorejo, Kabupaten Pasuruan, Jawa Timur (Kode Pos 67161)',
+  aksesStrategis: 'Poros Surabaya - Malang KM 48 Sukorejo',
+  deskripsiUmum: 'Cluster Arcadia merupakan kawasan hunian asri mandiri dengan konsep one-gate system di wilayah perbatasan Pasuruan - Malang yang mengedepankan keamanan, kerukunan, dan transparansi tata kelola lingkungan.',
+  pilarList: [
+    {
+      id: 'pilar-1',
+      judul: 'Blok Hunian',
+      deskripsi: 'Terdiri dari 4 Blok (Blok A, Blok B, Blok C, Blok D) dengan total lebih dari 45 unit rumah hunian berkonsep klaster asri dan modern.',
+      warnaAksen: 'emerald',
+    },
+    {
+      id: 'pilar-2',
+      judul: 'Fasilitas Bersama',
+      deskripsi: 'Gerbang One-Gate System dengan Pos Satpam 24 Jam, Taman Bundaran, Balai/Gazebo Warga, Lampu PJU mandiri, dan Saluran Drainase Resapan.',
+      warnaAksen: 'teal',
+    },
+    {
+      id: 'pilar-3',
+      judul: 'Prinsip Paguyuban',
+      deskripsi: 'Mengedepankan asas kekeluargaan, kegotongroyongan, transparansi pengelolaan kas, serta kenyamanan dan keamanan bagi seluruh penghuni.',
+      warnaAksen: 'sky',
+    },
+  ],
+  updatedAt: '2026-10-08',
+};
+
+export const INITIAL_AREA_PHOTOS: AreaFacilityPhoto[] = [
+  {
+    id: 'area-1',
+    title: 'Gerbang Utama One-Gate System',
+    category: 'Keamanan Lingkungan',
+    description: 'Pintu gerbang utama Cluster Arcadia dilengkapi portal otomatis dan pos satpam untuk pemeriksaan tamu 24 jam.',
+    imageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=80',
+    urutan: 1,
+  },
+  {
+    id: 'area-2',
+    title: 'Pos Satpam & Penjagaan 24 Jam',
+    category: 'Fasilitas Keamanan',
+    description: 'Petugas keamanan bersiaga penuh menjaga kenyamanan keluarga dan ketertiban lalu lintas kendaraan cluster.',
+    imageUrl: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=800&auto=format&fit=crop&q=80',
+    urutan: 2,
+  },
+  {
+    id: 'area-3',
+    title: 'Taman Bundaran & Gazebo Warga',
+    category: 'Ruang Terbuka Hijau',
+    description: 'Pusat ruang hijau asri di bundaran utama dengan gazebo santai untuk interaksi warga dan bermain anak.',
+    imageUrl: 'https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=800&auto=format&fit=crop&q=80',
+    urutan: 3,
+  },
+  {
+    id: 'area-4',
+    title: 'Jalan Lingkungan Paving Blok A & B',
+    category: 'Infrastruktur Jalan',
+    description: 'Jalan lingkungan paving block yang lebar, bersih, bebas genangan, dan tertata rapi dengan pepohonan peneduh.',
+    imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&auto=format&fit=crop&q=80',
+    urutan: 4,
+  },
+  {
+    id: 'area-5',
+    title: 'Penerangan Jalan Umum (PJU) Mandiri',
+    category: 'Fasilitas Umum',
+    description: 'Lampu LED hemat energi dipasang di setiap sudut jalan blok untuk menjamin keselamatan saat malam hari.',
+    imageUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80',
+    urutan: 5,
+  },
+  {
+    id: 'area-6',
+    title: 'Saluran Drainase & Resapan Air',
+    category: 'Kebersihan & Sanitasi',
+    description: 'Sistem selokan tertutup dan drainase resapan yang rutin dibersihkan secara gotong royong agar bebas banjir.',
+    imageUrl: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=800&auto=format&fit=crop&q=80',
+    urutan: 6,
+  },
+];
 
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { EMERGENCY_CONTACTS } from '../../data/initialData';
+import { EmergencyContact } from '../../types';
 import {
   PhoneCall,
   Shield,
@@ -16,7 +17,11 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
-export const NomorDaruratTab: React.FC = () => {
+interface NomorDaruratTabProps {
+  contacts?: EmergencyContact[];
+}
+
+export const NomorDaruratTab: React.FC<NomorDaruratTabProps> = ({ contacts = EMERGENCY_CONTACTS }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedKategori, setSelectedKategori] = useState<string>('Semua');
 
@@ -29,7 +34,7 @@ export const NomorDaruratTab: React.FC = () => {
     'Utilitas & Desa',
   ];
 
-  const filteredContacts = EMERGENCY_CONTACTS.filter(contact => {
+  const filteredContacts = contacts.filter(contact => {
     const matchesSearch =
       contact.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contact.nomor.includes(searchTerm) ||
@@ -75,117 +80,6 @@ export const NomorDaruratTab: React.FC = () => {
             </span>
           </div>
         </div>
-      </div>
-
-      {/* Quick Action Dial Cards (4 Layanan Utama) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-        {/* Polsek Sukorejo */}
-        <a
-          href="tel:0343611110"
-          className="bg-white p-4 sm:p-5 rounded-3xl border border-blue-200 hover:border-blue-400 shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="p-2.5 rounded-2xl bg-blue-100 text-blue-700 group-hover:scale-110 transition-transform">
-              <Shield className="w-5 h-5" />
-            </span>
-            <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full">
-              Polisi
-            </span>
-          </div>
-          <div>
-            <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight">
-              Polsek Sukorejo
-            </h4>
-            <span className="font-mono text-xs font-bold text-blue-700 block mt-1">
-              (0343) 611110
-            </span>
-          </div>
-          <div className="mt-3 pt-2 border-t border-blue-100 text-[11px] font-bold text-blue-600 flex items-center justify-between">
-            <span>Panggil Segera</span>
-            <PhoneCall className="w-3.5 h-3.5 group-hover:animate-bounce" />
-          </div>
-        </a>
-
-        {/* Pos Satpam Arcadia */}
-        <a
-          href="tel:081234567899"
-          className="bg-white p-4 sm:p-5 rounded-3xl border border-emerald-200 hover:border-emerald-400 shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="p-2.5 rounded-2xl bg-emerald-100 text-emerald-700 group-hover:scale-110 transition-transform">
-              <Shield className="w-5 h-5" />
-            </span>
-            <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full">
-              Satpam 24 Jam
-            </span>
-          </div>
-          <div>
-            <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight">
-              Pos Satpam Arcadia
-            </h4>
-            <span className="font-mono text-xs font-bold text-emerald-700 block mt-1">
-              0812-3456-7899
-            </span>
-          </div>
-          <div className="mt-3 pt-2 border-t border-emerald-100 text-[11px] font-bold text-emerald-600 flex items-center justify-between">
-            <span>Panggil Segera</span>
-            <PhoneCall className="w-3.5 h-3.5 group-hover:animate-bounce" />
-          </div>
-        </a>
-
-        {/* Puskesmas Sukorejo */}
-        <a
-          href="tel:0343611234"
-          className="bg-white p-4 sm:p-5 rounded-3xl border border-rose-200 hover:border-rose-400 shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="p-2.5 rounded-2xl bg-rose-100 text-rose-700 group-hover:scale-110 transition-transform">
-              <HeartPulse className="w-5 h-5" />
-            </span>
-            <span className="text-[10px] font-black uppercase text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full">
-              Medis
-            </span>
-          </div>
-          <div>
-            <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight">
-              Puskesmas Sukorejo
-            </h4>
-            <span className="font-mono text-xs font-bold text-rose-700 block mt-1">
-              (0343) 611234
-            </span>
-          </div>
-          <div className="mt-3 pt-2 border-t border-rose-100 text-[11px] font-bold text-rose-600 flex items-center justify-between">
-            <span>Panggil Segera</span>
-            <PhoneCall className="w-3.5 h-3.5 group-hover:animate-bounce" />
-          </div>
-        </a>
-
-        {/* Pemadam Kebakaran / Damkar */}
-        <a
-          href="tel:0343424113"
-          className="bg-white p-4 sm:p-5 rounded-3xl border border-amber-200 hover:border-amber-400 shadow-xs hover:shadow-md transition-all group flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <span className="p-2.5 rounded-2xl bg-amber-100 text-amber-700 group-hover:scale-110 transition-transform">
-              <Flame className="w-5 h-5" />
-            </span>
-            <span className="text-[10px] font-black uppercase text-amber-800 bg-amber-50 px-2 py-0.5 rounded-full">
-              Damkar
-            </span>
-          </div>
-          <div>
-            <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm leading-tight">
-              Damkar Pasuruan
-            </h4>
-            <span className="font-mono text-xs font-bold text-amber-700 block mt-1">
-              (0343) 424113
-            </span>
-          </div>
-          <div className="mt-3 pt-2 border-t border-amber-100 text-[11px] font-bold text-amber-600 flex items-center justify-between">
-            <span>Panggil Segera</span>
-            <PhoneCall className="w-3.5 h-3.5 group-hover:animate-bounce" />
-          </div>
-        </a>
       </div>
 
       {/* Filter & Search Bar */}

@@ -131,6 +131,64 @@
         "updatedAt": { "type": "string" }
       },
       "required": ["id", "folderName", "kegiatanJudul", "tanggal"]
+    },
+    "EmergencyContact": {
+      "title": "EmergencyContact",
+      "description": "Nomor Kontak Darurat Lingkungan & Wilayah Sukorejo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nama": { "type": "string" },
+        "nomor": { "type": "string" },
+        "keterangan": { "type": "string" },
+        "kategori": { "type": "string" },
+        "urutan": { "type": "number" }
+      },
+      "required": ["id", "nama", "nomor", "kategori"]
+    },
+    "TataTertibRule": {
+      "title": "TataTertibRule",
+      "description": "Pedoman Tata Tertib & Peraturan Warga Cluster Arcadia",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "pasal": { "type": "number" },
+        "judul": { "type": "string" },
+        "kategori": { "type": "string" },
+        "deskripsiSingkat": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "urutan": { "type": "number" }
+      },
+      "required": ["id", "pasal", "judul", "kategori", "items"]
+    },
+    "ProfilWilayahInfo": {
+      "title": "ProfilWilayahInfo",
+      "description": "Profil Lingkungan & Wilayah Cluster Arcadia",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "namaWilayah": { "type": "string" },
+        "subJudul": { "type": "string" },
+        "alamatLengkap": { "type": "string" },
+        "aksesStrategis": { "type": "string" },
+        "deskripsiUmum": { "type": "string" },
+        "pilarList": { "type": "array" }
+      },
+      "required": ["id", "namaWilayah", "alamatLengkap"]
+    },
+    "AreaFacilityPhoto": {
+      "title": "AreaFacilityPhoto",
+      "description": "Dokumentasi Fisik & Fasilitas RT 01",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "urutan": { "type": "number" }
+      },
+      "required": ["id", "title", "imageUrl"]
     }
   },
   "firestore": {
@@ -165,6 +223,22 @@
     "/documentation/{docId}": {
       "schema": "EventDocumentation",
       "description": "Koleksi folder dokumentasi kegiatan RT"
+    },
+    "/emergency_contacts/{contactId}": {
+      "schema": "EmergencyContact",
+      "description": "Koleksi nomor darurat & kontak penting lingkungan"
+    },
+    "/tatatertib/{ruleId}": {
+      "schema": "TataTertibRule",
+      "description": "Koleksi pasal dan butir tata tertib warga"
+    },
+    "/profil_wilayah/{profilId}": {
+      "schema": "ProfilWilayahInfo",
+      "description": "Koleksi informasi profil wilayah dan lingkungan"
+    },
+    "/area_facilities/{photoId}": {
+      "schema": "AreaFacilityPhoto",
+      "description": "Koleksi dokumentasi fisik & fasilitas area cluster"
     }
   }
 }

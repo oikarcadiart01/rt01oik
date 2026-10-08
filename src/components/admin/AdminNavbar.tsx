@@ -12,13 +12,16 @@ import {
 
 export type AdminNavTab =
   | 'beranda'
+  | 'pengumuman'
   | 'warga'
   | 'keuangan'
   | 'pengurus'
   | 'kegiatan'
   | 'pengaduan'
   | 'administrasi'
-  | 'profil';
+  | 'profil'
+  | 'darurat'
+  | 'tatatertib';
 
 interface AdminNavbarProps {
   activeTab: AdminNavTab;

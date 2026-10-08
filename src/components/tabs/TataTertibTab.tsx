@@ -1,20 +1,85 @@
 import React from 'react';
+import { TataTertibRule } from '../../types';
+import { INITIAL_TATATERTIB_RULES } from '../../data/initialData';
 import {
-  FileText,
   Shield,
   Trash2,
   Clock,
-  CheckCircle2,
   Car,
   HeartHandshake,
   AlertCircle,
-  HelpCircle,
   Sparkles,
-  Home,
   Check,
+  CheckCircle2,
 } from 'lucide-react';
 
-export const TataTertibTab: React.FC = () => {
+interface TataTertibTabProps {
+  rules?: TataTertibRule[];
+}
+
+const getPasalTheme = (pasal: number) => {
+  switch (pasal % 6) {
+    case 1:
+      return {
+        badgeBg: 'bg-blue-50 text-blue-700',
+        borderColor: 'border-blue-200',
+        headerBorder: 'border-blue-100',
+        iconBg: 'bg-gradient-to-br from-blue-500 to-indigo-600',
+        checkColor: 'text-blue-600',
+        icon: Shield,
+      };
+    case 2:
+      return {
+        badgeBg: 'bg-emerald-50 text-emerald-700',
+        borderColor: 'border-emerald-200',
+        headerBorder: 'border-emerald-100',
+        iconBg: 'bg-gradient-to-br from-emerald-500 to-teal-600',
+        checkColor: 'text-emerald-600',
+        icon: Trash2,
+      };
+    case 3:
+      return {
+        badgeBg: 'bg-amber-50 text-amber-800',
+        borderColor: 'border-amber-200',
+        headerBorder: 'border-amber-100',
+        iconBg: 'bg-gradient-to-br from-amber-500 to-orange-600',
+        checkColor: 'text-amber-600',
+        icon: Clock,
+      };
+    case 4:
+      return {
+        badgeBg: 'bg-rose-50 text-rose-700',
+        borderColor: 'border-rose-200',
+        headerBorder: 'border-rose-100',
+        iconBg: 'bg-gradient-to-br from-rose-500 to-red-600',
+        checkColor: 'text-rose-600',
+        icon: CheckCircle2,
+      };
+    case 5:
+      return {
+        badgeBg: 'bg-violet-50 text-violet-700',
+        borderColor: 'border-violet-200',
+        headerBorder: 'border-violet-100',
+        iconBg: 'bg-gradient-to-br from-violet-500 to-purple-600',
+        checkColor: 'text-violet-600',
+        icon: Car,
+      };
+    case 0:
+    default:
+      return {
+        badgeBg: 'bg-teal-50 text-teal-700',
+        borderColor: 'border-teal-200',
+        headerBorder: 'border-teal-100',
+        iconBg: 'bg-gradient-to-br from-teal-500 to-cyan-600',
+        checkColor: 'text-teal-600',
+        icon: HeartHandshake,
+      };
+  }
+};
+
+export const TataTertibTab: React.FC<TataTertibTabProps> = ({ rules = INITIAL_TATATERTIB_RULES }) => {
+  const displayRules = rules && rules.length > 0 ? rules : INITIAL_TATATERTIB_RULES;
+
   return (
     <div className="space-y-6">
       {/* Header Banner - Radiant Emerald & Teal */}
@@ -49,223 +114,48 @@ export const TataTertibTab: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid 6 Kategori Tata Tertib Lengkap */}
+      {/* Grid Kategori Tata Tertib Lengkap */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* 1. Keamanan & Ketertiban Tamu */}
-        <div className="bg-white rounded-3xl p-6 border border-blue-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-blue-100">
-            <span className="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl shadow-xs shrink-0">
-              <Shield className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
-                Pasal 1
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                1. Keamanan & Ketertiban Tamu
-              </h3>
+        {displayRules.map(rule => {
+          const theme = getPasalTheme(rule.pasal);
+          const IconComponent = theme.icon;
+
+          return (
+            <div
+              key={rule.id || `rule-${rule.pasal}`}
+              className={`bg-white rounded-3xl p-6 border ${theme.borderColor} shadow-sm space-y-3 hover:shadow-md transition-shadow`}
+            >
+              <div className={`flex items-center gap-3 pb-3 border-b ${theme.headerBorder}`}>
+                <span className={`p-3 ${theme.iconBg} text-white rounded-2xl shadow-xs shrink-0`}>
+                  <IconComponent className="w-6 h-6" />
+                </span>
+                <div>
+                  <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md ${theme.badgeBg}`}>
+                    Pasal {rule.pasal} • {rule.kategori}
+                  </span>
+                  <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
+                    {rule.pasal}. {rule.judul}
+                  </h3>
+                </div>
+              </div>
+
+              {rule.deskripsiSingkat && (
+                <p className="text-xs text-slate-500 italic pb-1">
+                  {rule.deskripsiSingkat}
+                </p>
+              )}
+
+              <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
+                {rule.items.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <CheckCircle2 className={`w-4 h-4 ${theme.checkColor} shrink-0 mt-0.5`} />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <span>Pintu gerbang utama (One-Gate System) portal otomatis ditutup pada pukul <strong>22.00 s.d. 05.00 WIB</strong> demi keamanan cluster.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <span>Tamu atau kerabat yang berkunjung dan menginap lebih dari <strong>1x24 jam</strong> wajib melapor ke Pos Satpam atau Pengurus RT melalui Formulir Tamu Menginap.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <span>Tamu yang memasuki cluster wajib menitipkan identitas (KTP/SIM) di Pos Satpam apabila berkunjung di atas pukul 22.00 WIB.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <span>Bagi penghuni baru (warga tetap maupun kontrak/sewa) wajib melapor 1x24 jam kepada Ketua RT dengan menyerahkan fotokopi KTP dan Kartu Keluarga (KK).</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* 2. Kebersihan Lingkungan & Pengelolaan Sampah */}
-        <div className="bg-white rounded-3xl p-6 border border-emerald-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-emerald-100">
-            <span className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl shadow-xs shrink-0">
-              <Trash2 className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                Pasal 2
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                2. Kebersihan Lingkungan & Sampah
-              </h3>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Setiap rumah wajib menyediakan tempat sampah bertutup di halaman/depan pagar masing-masing agar tidak diacak hewan liar.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Jadwal pengambilan sampah rumah tangga oleh petugas desa dilakukan secara rutin setiap hari <strong>Selasa, Kamis, dan Sabtu pagi</strong>.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span><strong>Dilarang keras membakar sampah</strong> di pekarangan rumah atau jalan cluster yang menimbulkan polusi asap dan mengganggu tetangga.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <span>Warga diharapkan aktif mengikuti kegiatan gotong royong kerja bakti massal kebersihan saluran air drainase lingkungan secara berkala.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* 3. Jam Tenang & Renovasi Bangunan */}
-        <div className="bg-white rounded-3xl p-6 border border-amber-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-amber-100">
-            <span className="p-3 bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-2xl shadow-xs shrink-0">
-              <Clock className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md">
-                Pasal 3
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                3. Jam Tenang & Renovasi Bangunan
-              </h3>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>Jam tenang lingkungan berlaku mulai pukul <strong>22.00 s.d. 06.00 WIB</strong>. Hindari aktivitas yang menimbulkan kebisingan tinggi pada jam istirahat.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>Pekerjaan renovasi rumah (tukang, pembongkaran, pemotongan keramik) hanya diizinkan pada hari <strong>Senin s.d. Sabtu pukul 08.00 - 17.00 WIB</strong> (Hari Minggu libur kerja berisik).</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>Penumpukan material bangunan (pasir, batu bata, adukan semen) tidak boleh menghalangi akses jalan warga lain dan wajib dibersihkan maksimal 3 hari setelah diturunkan.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <span>Renovasi yang memerlukan penutupan separuh jalan wajib meminta izin kepada Pengurus RT dan berkoordinasi dengan tetangga kanan-kiri.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* 4. Kewajiban Iuran Bulanan Paguyuban */}
-        <div className="bg-white rounded-3xl p-6 border border-rose-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-rose-100">
-            <span className="p-3 bg-gradient-to-br from-rose-500 to-red-600 text-white rounded-2xl shadow-xs shrink-0">
-              <CheckCircle2 className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md">
-                Pasal 4
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                4. Kewajiban Iuran Bulanan Paguyuban
-              </h3>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <span>Setiap Kepala Keluarga (KK) / unit rumah berpenghuni berkewajiban membayar iuran bulanan paguyuban sebesar <strong>Rp 100.000 / KK / Bulan</strong>.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <span>Iuran bulanan mencakup gaji satpam pos jaga 24 jam, retribusi sampah desa, penerangan jalan umum (listrik token PJU), perawatan taman & dana sosial warga.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <span>Pembayaran dilakukan paling lambat <strong>tanggal 10 setiap bulannya</strong> kepada Bendahara RT secara tunai atau transfer rekening kas RT.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-              <span>Laporan pembukuan kas bulanan dipublikasikan secara transparan 100% dan dapat dipantau oleh seluruh warga melalui portal RT.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* 5. Ketertiban Parkir & Batas Kecepatan */}
-        <div className="bg-white rounded-3xl p-6 border border-violet-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-violet-100">
-            <span className="p-3 bg-gradient-to-br from-violet-500 to-purple-600 text-white rounded-2xl shadow-xs shrink-0">
-              <Car className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-violet-700 bg-violet-50 px-2 py-0.5 rounded-md">
-                Pasal 5
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                5. Ketertiban Parkir & Batas Kecepatan
-              </h3>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
-              <span>Batas kecepatan berkendara seluruh kendaraan bermotor di dalam area cluster maksimal <strong>20 km/jam</strong> demi keselamatan anak-anak dan pejalan kaki.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
-              <span>Kendaraan mobil pribadi diutamakan diparkir di dalam carport atau garasi rumah masing-masing agar tidak mempersempit akses manuver jalan tetangga.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
-              <span>Dilarang memarkir kendaraan di tikungan tajam, depan hidran/portal, atau tepat di depan gerbang pagar rumah warga lain tanpa izin.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
-              <span>Kendaraan tamu yang menginap wajib diparkir dengan rapi dan berkoordinasi dengan petugas keamanan Pos Satpam.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* 6. Kerukunan, Toleransi & Penggunaan Fasilitas Bersama */}
-        <div className="bg-white rounded-3xl p-6 border border-teal-200 shadow-sm space-y-3 hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 pb-3 border-b border-teal-100">
-            <span className="p-3 bg-gradient-to-br from-teal-500 to-cyan-600 text-white rounded-2xl shadow-xs shrink-0">
-              <HeartHandshake className="w-6 h-6" />
-            </span>
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-teal-700 bg-teal-50 px-2 py-0.5 rounded-md">
-                Pasal 6
-              </span>
-              <h3 className="font-extrabold text-slate-900 text-base mt-0.5">
-                6. Kerukunan & Fasilitas Bersama
-              </h3>
-            </div>
-          </div>
-
-          <ul className="space-y-2.5 text-xs text-slate-600 font-medium leading-relaxed">
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
-              <span>Warga saling menghormati perbedaan suku, agama, dan budaya serta menjunjung tinggi asas musyawarah untuk mufakat dalam menyelesaikan perbedaan.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
-              <span>Warga yang memelihara hewan peliharaan (kucing, anjing, burung) wajib menjaga kebersihan dan tidak membiarkan kotoran hewan di jalan umum atau halaman tetangga.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
-              <span>Penggunaan fasilitas bersama seperti Gazebo Warga, Bundaran Taman, dan inventaris RT (tenda, sound system, kursi) dikoordinasikan terlebih dahulu ke Pengurus RT.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
-              <span>Warga yang akan mengadakan acara hajatan/syukuran yang berpotensi ramai dimohon menyampaikan pemberitahuan ke tetangga sekitar dan Pengurus RT.</span>
-            </li>
-          </ul>
-        </div>
+          );
+        })}
       </div>
 
       {/* Catatan Sanksi & Pengaduan Pelanggaran */}

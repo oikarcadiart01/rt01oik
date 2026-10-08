@@ -15,6 +15,7 @@ import {
   PhoneCall,
   LogOut,
   Images,
+  BookOpen,
 } from 'lucide-react';
 
 interface AdminMobileNavProps {
@@ -113,6 +114,23 @@ export const AdminMobileNav: React.FC<AdminMobileNavProps> = ({
 
             <div className="grid grid-cols-2 gap-2.5 mt-4">
               <button
+                onClick={() => handleSelectTab('pengumuman')}
+                className={`p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all ${
+                  activeTab === 'pengumuman'
+                    ? 'bg-amber-50 border-amber-300 text-amber-900'
+                    : 'bg-slate-50/80 border-slate-200 hover:bg-amber-50/50 text-slate-800'
+                }`}
+              >
+                <span className="p-2 bg-amber-100 text-amber-700 rounded-xl">
+                  <LayoutDashboard className="w-4 h-4" />
+                </span>
+                <div>
+                  <span className="text-xs font-bold block">Pengumuman</span>
+                  <span className="text-[10px] text-slate-500">Tambah & Edit Warta</span>
+                </div>
+              </button>
+
+              <button
                 onClick={() => handleSelectTab('administrasi')}
                 className={`p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all ${
                   activeTab === 'administrasi'
@@ -177,6 +195,40 @@ export const AdminMobileNav: React.FC<AdminMobileNavProps> = ({
                 <div>
                   <span className="text-xs font-bold block">Profil Wilayah</span>
                   <span className="text-[10px] text-slate-500">Peta & Fasilitas RT</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => handleSelectTab('darurat')}
+                className={`p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all ${
+                  activeTab === 'darurat'
+                    ? 'bg-rose-50 border-rose-300 text-rose-900'
+                    : 'bg-slate-50/80 border-slate-200 hover:bg-rose-50/50 text-slate-800'
+                }`}
+              >
+                <span className="p-2 bg-rose-100 text-rose-700 rounded-xl">
+                  <PhoneCall className="w-4 h-4" />
+                </span>
+                <div>
+                  <span className="text-xs font-bold block">Nomor Darurat</span>
+                  <span className="text-[10px] text-slate-500">Tambah & Edit Kontak</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => handleSelectTab('tatatertib')}
+                className={`p-3.5 rounded-2xl border text-left flex items-center gap-3 transition-all ${
+                  activeTab === 'tatatertib'
+                    ? 'bg-teal-50 border-teal-300 text-teal-900'
+                    : 'bg-slate-50/80 border-slate-200 hover:bg-teal-50/50 text-slate-800'
+                }`}
+              >
+                <span className="p-2 bg-teal-100 text-teal-700 rounded-xl">
+                  <BookOpen className="w-4 h-4" />
+                </span>
+                <div>
+                  <span className="text-xs font-bold block">Tata Tertib</span>
+                  <span className="text-[10px] text-slate-500">Tambah & Edit Peraturan</span>
                 </div>
               </button>
             </div>
